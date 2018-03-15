@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {Dimensions} from 'react-native';
 import ConfirmCode  from './components/ConfirmCode';
 import InOutLog from './components/InOutLog';
+import RegisterPerson from './components/RegisterPerson';
 import Me from './components/Me';
 
 const deviceW = Dimensions.get('window').width
@@ -37,22 +38,31 @@ export default class MainPage extends Component {
             <TabNavigator style={styles.container}>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'ConfirmCode'}
-                  title="ConfirmCode"
+                  title="验证码"
                   selectedTitleStyle={{color: "#3496f0"}}
-                  renderIcon={() => <Icon name="home" size={px2dp(22)} color="#666"/>}
-                  renderSelectedIcon={() => <Icon name="home" size={px2dp(22)} color="#3496f0"/>}
-                  badgeText="1"
+                  renderIcon={() => <Icon name={'key'} size={px2dp(22)} color="#666"/>}
+                  renderSelectedIcon={() => <Icon name={'key'} size={px2dp(22)} color="#3496f0"/>}
                   onPress={() => this.setState({selectedTab: 'ConfirmCode'})}>
                 <ConfirmCode/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'InOutLog'}
                   title="InOutLog"
+                  badgeText="2"
+                  selectedTitleStyle={{color: "#3496f0"}}
+                  renderIcon={() => <Icon name="eye" size={px2dp(22)} color="#666"/>}
+                  renderSelectedIcon={() => <Icon name="eye" size={px2dp(22)} color="#3496f0"/>}
+                  onPress={() => this.setState({selectedTab: 'InOutLog'})}>
+                <InOutLog/>
+                </TabNavigator.Item>
+                <TabNavigator.Item
+                  selected={this.state.selectedTab === 'RegisterPerson'}
+                  title="RegisterPerson"
                   selectedTitleStyle={{color: "#3496f0"}}
                   renderIcon={() => <Icon name="users" size={px2dp(22)} color="#666"/>}
                   renderSelectedIcon={() => <Icon name="users" size={px2dp(22)} color="#3496f0"/>}
-                  onPress={() => this.setState({selectedTab: 'InOutLog'})}>
-                <InOutLog/>
+                  onPress={() => this.setState({selectedTab: 'RegisterPerson'})}>
+                <RegisterPerson/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'Me'}
