@@ -6,18 +6,18 @@
 
 import React, { Component } from 'react';
 import {
+  AppRegistry,
   Platform,
   StyleSheet,
   Text,
   View
 } from 'react-native';
-import Login from './Login'
+import Login from './Login';
+import MainPage from './MainPage'
+import { StackNavigator } from 'react-navigation';
 
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <Login/>
-    );
-  }
-}
 
+export default App = StackNavigator({
+  Login: { screen: Login},
+  MainPage: { screen: MainPage}
+});

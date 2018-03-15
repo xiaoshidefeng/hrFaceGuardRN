@@ -4,16 +4,22 @@ import {
     StyleSheet,
     Text,
     View,
-    Navigator,
     TextInput,
     TouchableHighlight
 } from 'react-native';
 import MainPage from './MainPage'
+import { StackNavigator,
+         NavigationActions } from 'react-navigation';
+
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.loginInMainpage = this.loginInMainpage.bind(this);
     }
+
+    static  navigationOptions = {
+        title: '登录',
+    };
 
     render() {
         return (<View style={styles.container}>
@@ -41,7 +47,7 @@ export default class Login extends Component {
             </View>
             <TouchableHighlight style={styles.login}
                                 underlayColor='transparent'
-                                onPress={()=>this.loginInMainpage()}><Text
+                                onPress={() => this.loginInMainpage()}><Text
                 style={styles.loginText}>登录</Text></TouchableHighlight>
         </View>)
     }
@@ -50,17 +56,20 @@ export default class Login extends Component {
      * 登录进入主页面
      */
     loginInMainpage() {
+
+        // 这里开始验证
+        // let uName = this.state.username;
+        // let uPwd = this.state.userpwd;
+
+        resetActions = NavigationActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({routeName: 'MainPage'})]
+        });
+        this.props.navigation.dispatch(resetActions);
         this.refs.inputLoginName.blur();
         this.refs.inputLoginPwd.blur();
-        this.props.navigator.resetTo({
-            component: MainPage,
-            params: {
-                logNmae: this.state.username,
-                logPwd: this.state.userpwd,
-                parentComponent: this,
-                ...this.props
-            },
-        });
+
+
     }
 
     setLoginName(input) {
@@ -99,3 +108,9 @@ const styles = StyleSheet.create({
     }
 
 })
+const loginStack = StackNavigator({
+    Login: { screen: Login },
+    MainPage: {screen: MainPage}
+  });
+  
+  AppRegistry.registerComponent('loginStack', () => App);
