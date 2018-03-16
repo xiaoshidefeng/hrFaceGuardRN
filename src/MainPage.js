@@ -47,7 +47,7 @@ export default class MainPage extends Component {
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'InOutLog'}
-                  title="InOutLog"
+                  title="进出情况"
                   badgeText="2"
                   selectedTitleStyle={{color: "#3496f0"}}
                   renderIcon={() => <Icon name="eye" size={px2dp(22)} color="#666"/>}
@@ -57,7 +57,7 @@ export default class MainPage extends Component {
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'RegisterPerson'}
-                  title="RegisterPerson"
+                  title="注册成员"
                   selectedTitleStyle={{color: "#3496f0"}}
                   renderIcon={() => <Icon name="users" size={px2dp(22)} color="#666"/>}
                   renderSelectedIcon={() => <Icon name="users" size={px2dp(22)} color="#3496f0"/>}
@@ -66,7 +66,7 @@ export default class MainPage extends Component {
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'Me'}
-                  title="Me"
+                  title="我"
                   selectedTitleStyle={{color: "#3496f0"}}
                   renderIcon={() => <Icon name="user" size={px2dp(22)} color="#666"/>}
                   renderSelectedIcon={() => <Icon name="user" size={px2dp(22)} color="#3496f0"/>}
