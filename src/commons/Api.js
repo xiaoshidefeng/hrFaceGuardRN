@@ -60,12 +60,6 @@ export const UPDATE_PERMISSION_TIME = BASE_URL + '/users/';
  */
 export const GET_USER_PERMISSION_TIME_BY_ADDRESS = BASE_URL + '/users/';
 
-/**
- * 获取某个用户在某地址的权限和时间段
- * method: GET
- * /users/1/addresses/1
- */
-export const GET_USER_PERMISSION_TIME_BY_ADDRESS = BASE_URL + '/users/';
 
 /**
  * 删除某用户与某地址的绑定
