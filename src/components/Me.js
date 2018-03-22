@@ -10,6 +10,93 @@ import {
 import { StackNavigator,
   NavigationActions } from 'react-navigation';
 
+  import { List, ListItem } from 'react-native-elements';
+
+const list = [
+    {
+        name: 'Amy Farha',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+        subtitle: 'Vice President'
+    },
+    {
+        name: 'Chris Jackson',
+        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+        subtitle: 'Vice Chairman'
+    }
+]
+
+class Head extends Component {
+    render() {
+        return(
+            <View style={ProfilePageStyle.container}>
+            {/* <Image source={require('./img/head.jpg')} /> */}
+            <View style={{alignItems: 'flex-end'}}>
+                <TouchableWithoutFeedback onPress={this.props.onSettingClick}>
+                    <Image
+                        source={require('./img/head.jpg')}
+                        style={ProfilePageStyle.btn_setting}/>
+                </TouchableWithoutFeedback>
+      
+            </View>
+            <View style={ProfilePageStyle.container_avater}>
+                    <Image
+                        style={ProfilePageStyle.img_avatar}
+                        source={require('./img/png.png')}
+                    />
+                <Text onPress={this.props.onNameClick}>胖虎</Text>
+            </View>
+            <View style={ProfilePageStyle.container_favority_and_reply}>
+                <TouchableWithoutFeedback onPress={this.props.onFavorityClick}>
+                    <View style={ProfilePageStyle.container_favority}>
+                        <Image
+                            style={ProfilePageStyle.img_favority}
+                            source={require('./img/head.jpg')}/>
+                        <Text style={ProfilePageStyle.tv_favority}>收藏</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={this.props.onReplyClick}>
+                    <View style={ProfilePageStyle.container_reply}>
+                        <Image
+                            style={ProfilePageStyle.img_reply}
+                            source={require('./img/head.jpg')}/>
+                        <Text style={ProfilePageStyle.tv_reply}>评论</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
+        </View>
+        )
+    }
+}
+
+class SetList extends Component {
+    render() {
+        return (
+            <View style={{ marginTop: 10}}>
+            <List containerStyle={{ marginTop: 5}}>
+            {
+                list.map((l, i) => (
+                    <ListItem
+                    roundAvatar
+                    avatar={{uri:l.avatar_url}}
+                    key={i}
+                    title={l.name}
+                    subtitle={
+                        <View style={styles.subtitleView}>
+                        {/* <Image source={require('../images/rating.png')} style={styles.ratingImage}/> */}
+                        <Text style={styles.ratingText}>5 months ago</Text>
+                        </View>
+                    }
+                />
+                ))
+            }
+            </List>
+            </View>
+
+        )
+    }
+}
+
+
 export default class Me extends Component {
 
   static  navigationOptions = {
@@ -19,42 +106,11 @@ export default class Me extends Component {
 
   render() {
     return (
-      <View style={ProfilePageStyle.container}>
-      {/* <Image source={require('./img/head.jpg')} /> */}
-      <View style={{alignItems: 'flex-end'}}>
-          <TouchableWithoutFeedback onPress={this.props.onSettingClick}>
-              <Image
-                  source={require('./img/head.jpg')}
-                  style={ProfilePageStyle.btn_setting}/>
-          </TouchableWithoutFeedback>
+        <View>
+            <Head></Head>
+            <SetList></SetList>
+        </View>
 
-      </View>
-      <View style={ProfilePageStyle.container_avater}>
-              <Image
-                  style={ProfilePageStyle.img_avatar}
-                  source={require('./img/png.png')}
-              />
-          <Text onPress={this.props.onNameClick}>Marno</Text>
-      </View>
-      <View style={ProfilePageStyle.container_favority_and_reply}>
-          <TouchableWithoutFeedback onPress={this.props.onFavorityClick}>
-              <View style={ProfilePageStyle.container_favority}>
-                  <Image
-                      style={ProfilePageStyle.img_favority}
-                      source={require('./img/head.jpg')}/>
-                  <Text style={ProfilePageStyle.tv_favority}>收藏</Text>
-              </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={this.props.onReplyClick}>
-              <View style={ProfilePageStyle.container_reply}>
-                  <Image
-                      style={ProfilePageStyle.img_reply}
-                      source={require('./img/head.jpg')}/>
-                  <Text style={ProfilePageStyle.tv_reply}>评论</Text>
-              </View>
-          </TouchableWithoutFeedback>
-      </View>
-  </View>
     );
   }
 }
