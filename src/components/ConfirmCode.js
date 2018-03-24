@@ -6,11 +6,15 @@ import {
   View
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import TitleBar from './TitleBar';
 
 export default class ConfirmCode extends Component {
   render() {
-    return (
-      <Text>ConfirmCode</Text>      
+    return (    
+      <View>
+        <TitleBar title="验证码"></TitleBar>
+        <Text>ConfirmCode</Text>
+      </View>  
     );
   }
 }

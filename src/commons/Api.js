@@ -2,9 +2,11 @@
  * API 接口
  */
 
-const BASE_URL = 'http://10.30.90.16:8000/api/v1';
 
-/**
+export const HOST = 'http://10.30.90.16:8000/';
+
+export const BASE_URL = HOST +　'api/v1';
+/*
  * 通过账号密码登录
  * method: POST 
  * /auth/login/
@@ -23,7 +25,7 @@ export const BIND_CONFIRM_CODE = BASE_URL + '/users/';
  * method: GET
  * /addresses/1/visits
  */
-export const GET_IN_OUT_LOG_BY_ADDRESS = BASE_URL + '/address/';
+export const GET_IN_OUT_LOG_BY_ADDRESS = BASE_URL + '/addresses/';
 
 /**
  * 为地址绑定用户并赋予权限和时间段

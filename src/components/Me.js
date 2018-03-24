@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { StackNavigator,
   NavigationActions } from 'react-navigation';
-
-  import { List, ListItem } from 'react-native-elements';
+import { List, ListItem } from 'react-native-elements';
+import TitleBar from './TitleBar';
 
 const list = [
     {
@@ -81,9 +81,9 @@ class SetList extends Component {
                     key={i}
                     title={l.name}
                     subtitle={
-                        <View style={styles.subtitleView}>
+                        <View>
                         {/* <Image source={require('../images/rating.png')} style={styles.ratingImage}/> */}
-                        <Text style={styles.ratingText}>5 months ago</Text>
+                        <Text>5 months ago</Text>
                         </View>
                     }
                 />
@@ -107,6 +107,7 @@ export default class Me extends Component {
   render() {
     return (
         <View>
+            <TitleBar title="我"></TitleBar>
             <Head></Head>
             <SetList></SetList>
         </View>

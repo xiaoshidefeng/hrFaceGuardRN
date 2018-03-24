@@ -3,14 +3,19 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableHighlight
 } from 'react-native';
+import TitleBar from './TitleBar';
 import { StackNavigator } from 'react-navigation';
 
 export default class RegisterPerson extends Component {
   render() {
     return (
-      <Text>RegisterPerson</Text>
+      <View>
+        <TitleBar title="注册成员"></TitleBar>
+        <Text>RegisterPerson</Text>
+      </View>
     );
   }
 }

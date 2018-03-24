@@ -10,7 +10,8 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  
 } from 'react-native';
 import Login from './Login';
 import MainPage from './MainPage'

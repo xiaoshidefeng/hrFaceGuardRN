@@ -30,6 +30,8 @@ export default class MainPage extends Component {
     }
     state= {
         selectedTab: 'ConfirmCode',
+        userid: 1,
+
     };
     static  navigationOptions = {
         header: null
@@ -37,6 +39,15 @@ export default class MainPage extends Component {
     // static navigationOptions = {
     //     title: 'main',
     //   };
+
+    componentWillMount() {
+        this.fetchUserInfo();
+    }
+
+    fetchUserInfo() {
+
+    };
+
     render() {
         return (
             <TabNavigator style={styles.container}>
@@ -84,6 +95,7 @@ export default class MainPage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        // backgroundColor: '#008B8B',
     },
     textStyle: {
         fontSize: 18,
