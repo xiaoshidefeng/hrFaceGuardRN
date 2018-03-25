@@ -115,7 +115,7 @@ export default class InOutLog extends Component {
             lists[0].name = "123";
             console.log('lists');
             lists = lists + "{ \"" + "time" + "\":" + "\"" + logList[0].visit_time + "\" , ";
-            lists = lists + "\"" + "title" + "\":" + "\"" + logList[0].user.name + "\" , "; 
+            lists = lists + "\"" + "title" + "\":" + "\"" + logList[0].nickname + "\" , "; 
             lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[0].pic + "\","; 
             lists = lists + "\"" + "description" + "\":" + "\"" + logList[0].result + "\"";
             if (logList[0].result == '通过') {
@@ -128,7 +128,7 @@ export default class InOutLog extends Component {
             lists = lists +　" }"
             for (var i = 1, l = logList.length; i < l; i++) {
               lists = lists + ",{ \"" + "time" + "\":" + "\"" + logList[i].visit_time + "\" , ";
-              lists = lists + "\"" + "title" + "\":" + "\"" + logList[i].user.name + "\" , "; 
+              lists = lists + "\"" + "title" + "\":" + "\"" + logList[i].nickname + "\" , "; 
               lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[i].pic + "\" , ";
               lists = lists + "\"" + "description" + "\":" + "\"" + logList[i].result + "\"";   
               if (logList[i].result == '通过') {
