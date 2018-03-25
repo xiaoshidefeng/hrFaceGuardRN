@@ -12,7 +12,7 @@ import {
   
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { List, ListItem } from 'react-native-elements';
+// import { List, ListItem } from 'react-native-elements';
 import {GET_IN_OUT_LOG_BY_ADDRESS,BASE_URL} from '../commons/Api';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import Storage from 'react-native-storage';
@@ -221,6 +221,7 @@ export default class InOutLog extends Component {
           style={styles.list}
           data={this.state.list}
           circleSize={20}
+          enableEmptySections={true}
           circleColor='rgba(0,0,0,0)'
           lineColor='rgb(45,156,219)'
           timeContainerStyle={{minWidth:52, marginTop: 0}}
