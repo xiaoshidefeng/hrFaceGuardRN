@@ -3,7 +3,7 @@
  */
 
 
-export const HOST = 'http://10.30.90.16:8000/';
+export const HOST = 'http://10.30.90.212:8000/';
 
 export const BASE_URL = HOST +　'api/v1';
 /*
@@ -27,6 +27,13 @@ export const LOGIN_BY_FACE = BASE_URL + '/face/auth';
  * /users/3/codes
  */
 export const BIND_CONFIRM_CODE = BASE_URL + '/users/';
+
+/*
+ * 通过二维码进入
+ * method: POST 
+ * /auth/qrcode
+ */
+export const PASS_BY_QRCODE = BASE_URL + '/auth/qrcode';
 
 /**
  * 获取某个住址的所有访问记录

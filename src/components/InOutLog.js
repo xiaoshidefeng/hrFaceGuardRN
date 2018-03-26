@@ -8,7 +8,10 @@ import {
   object,
   Image,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Button,
+  TextInput
   
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -18,8 +21,14 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import Storage from 'react-native-storage';
 import Timeline from 'react-native-timeline-listview';
 import TitleBar from './TitleBar';
+import PopupDialog, 
+{ SlideAnimation,
+  ScaleAnimation,  
+  DialogTitle,
+  DialogButton, } from 'react-native-popup-dialog';
 
-
+const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
+const scaleAnimation = new ScaleAnimation();
 
 export default class InOutLog extends Component {
   constructor(props) {
@@ -51,6 +60,8 @@ export default class InOutLog extends Component {
     token: '',
     isRefreshing: false,      
     waiting: false,
+    dialogShow: false,
+    nick_name: 'tom'
   }
 
   componentWillMount() {
@@ -211,6 +222,19 @@ export default class InOutLog extends Component {
       </View>
     )
   }
+  showScaleAnimationDialog() {
+    this.scaleAnimationDialog.show();
+  }
+
+  clickItem(event) {
+    console.log('click item');
+    console.log(event);
+
+    this.setState({nick_name: event.title});
+
+    this.showScaleAnimationDialog();
+    
+  }
 
   render() {
     return (
@@ -240,8 +264,51 @@ export default class InOutLog extends Component {
           columnFormat='two-column'
           renderDetail={this.renderDetail}
           separator={false}
+          onEventPress={(event) => {this.clickItem(event)}}
           detailContainerStyle={{marginBottom: 20, paddingLeft: 5, paddingRight: 5, backgroundColor: "#BBDAFF", borderRadius: 10}}
         />
+
+        <PopupDialog
+          ref={(popupDialog) => {
+            this.scaleAnimationDialog = popupDialog;
+          }}
+          dialogAnimation={scaleAnimation}
+          dialogTitle={<DialogTitle title="Popup Dialog - Scale Animation" />}
+          actions={[
+            <View style={styles.dia_btn_warpper}> 
+            <DialogButton
+              text="绑定"
+              align="left"     
+              buttonStyle={styles.dia_btn}                              
+              onPress={() => {
+                this.scaleAnimationDialog.dismiss();
+              }}
+              key="button-1"
+            />
+            <DialogButton
+              text="关闭"
+              align="right"   
+              buttonStyle={styles.dia_btn}             
+              onPress={() => {
+                this.scaleAnimationDialog.dismiss();
+              }}
+              key="button-2"
+            />
+            </View>
+          ]}
+        >
+          <View style={styles.dialogContentView}>
+            <View style={styles.input_warpper}>
+              <Text style={styles.input_lable}>昵称</Text>
+              <TextInput
+                style={styles.input_style}
+                onChangeText={(text) => this.setState({text})}
+                value={this.state.nick_name}
+              />
+            </View>
+          </View>
+        </PopupDialog>
+
       <Toast ref="toast"/>
       </View>
       </View>
@@ -256,6 +323,35 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor:'white'
   },
+  input_warpper: {
+    flexDirection: 'row',
+    
+  },
+  input_lable: {
+    flex: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    fontSize: 20,
+    justifyContent: 'center',
+    textAlign:'center',
+  },
+  input_style: {
+    flex: 3,
+    height: 40, 
+    borderColor: 'gray', 
+    borderWidth: 1,
+    paddingRight: 10,
+    justifyContent: 'center',
+    
+  },
+  dia_btn_warpper: {
+    flexDirection: 'row',
+  },
+  dia_btn:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  } ,             
   container: {
     flex: 1,
     paddingLeft: 20,

@@ -7,6 +7,7 @@ import QrScan from './QrScan';
 // import Camera from './comp/BarFind'
 import { StackNavigator,
     NavigationActions } from 'react-navigation';
+import {PASS_BY_QRCODE} from '../commons/Api';
 
 
 const styles = StyleSheet.create({
@@ -70,6 +71,7 @@ export default class QrScanView extends React.Component {
         flashMode: Camera.constants.FlashMode.auto,
       },
       isRecording: false,
+      token: ''
     };
   }
 
@@ -168,18 +170,98 @@ export default class QrScanView extends React.Component {
 
     return icon;
   }
-  onBarCodeRead(data) {
+  onBarCodeRead = (data)  => {
     //将返回的结果转为对象
     // var result = JSON.parse(data.data);
-    
-    console.log('hello world!');
-    console.log(data);
-    this.props.navigation.goBack();
+    if (data.type == 'QR_CODE') {
+      console.log(data.data);
+      // navigation.navigate.goBack();
+
+      // this.goBack();
+      this.toConfirm(data.data);
+    }
+
+    // this.props.navigation.goBack();
     // this.refs.toast.show('data');                
     
     
-    }
+  }
+
+  toConfirm(code) {
+    // this.setState({logining: true});
+
+    storage.load({
+      key: 'user',
+      
+      // autoSync(默认为true)意味着在没有找到数据或数据过期时自动调用相应的sync方法
+      autoSync: true,
+      
+      // syncInBackground(默认为true)意味着如果数据过期，
+      // 在调用sync方法的同时先返回已经过期的数据。
+      // 设置为false的话，则始终强制返回sync方法提供的最新数据(当然会需要更多等待时间)。
+      syncInBackground: true,
+      
+      // 你还可以给sync方法传递额外的参数
+      syncParams: {
+        extraFetchOptions: {
+          // 各种参数
+        },
+        someFlag: true,
+      },
+    }).then(ret => {
+      console.log('token success' + ret.token);      
+      this.setState({token: ret.token});
+      console.log(code + '111111111');
+      this.toFetchCode(code);
+      
+    }).catch(err => {
+      this.refs.toast.show('获取用户信息失败');      
+      console.log('token err' + err.message);
+      switch (err.name) {
+          case 'NotFoundError':
+              // TODO;
+              break;
+          case 'ExpiredError':
+              // TODO
+              break;
+      }
+    })
+
+  }
+
+  toFetchCode(code) {
+    let formData = new FormData();  
+    formData.append("uuid",code);  
+    (async () => {
+      try {
+          const resC = await fetch(PASS_BY_QRCODE, {
+              method: 'POST',
+              headers: {
+                'Authorization': this.state.token
+              },
+              body: formData
+          });
+          // const data = await resC.json();
+          // console.log(data);
+          resetActions = NavigationActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({routeName: 'MainPage'})]
+          });
+          console.log('123');                
+          this.props.navigation.dispatch(resetActions);
+          // this.toLoad();
+          return true;
+
+      } catch (err) {
+          console.log(err)
+          // this.setState({logining: false});
+          this.refs.toast.show('扫码失败');
+      }
+  })();
+  }
+
   render() {
+    const navigation = this.props.navigation;
     return (
       <View style={styles.container}>
         <StatusBar animated hidden />
@@ -197,8 +279,8 @@ export default class QrScanView extends React.Component {
           defaultTouchToFocus
           mirrorImage={false}
           cropToPreview={false}
-          permissionDialogTitle="Sample title"
-          permissionDialogMessage="Sample dialog message"
+          permissionDialogTitle="相机权限请求"
+          permissionDialogMessage="请打开相机权限"
           onBarCodeRead={this.onBarCodeRead}
           // barcodeFinderVisible={true}
 					// barcodeFinderWidth={290}
@@ -212,7 +294,7 @@ export default class QrScanView extends React.Component {
               rectWidth={280}
               rectHeight={280}
               scanBarImage={null}
-              cornerColor={'#000fff'}
+              cornerColor={'#008B8B'}
               cornerOffsetSize={0}
               borderWidth={0}
               hintText={'我的二维码'}

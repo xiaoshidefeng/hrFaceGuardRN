@@ -100,6 +100,8 @@ export default class Login extends Component {
         
         (async () => {
             try {
+                console.log(LOGIN_BY_PASSWORD);                
+                
                 const resC = await fetch(LOGIN_BY_PASSWORD, {
                     method: 'POST',
                     // headers: {
@@ -108,6 +110,7 @@ export default class Login extends Component {
                     // },
                     body: formData
                 });
+                
                 const data = await resC.json();
                 console.log(data.token);
                 storage.save({

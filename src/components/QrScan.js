@@ -11,7 +11,6 @@ import
     Image
 } from 'react-native';
 
-let isClosed = false;
 
 // 扫码界面
 export default class CoverView extends Component {
@@ -52,6 +51,7 @@ export default class CoverView extends Component {
             topHeight: 0,
             leftWidth: 0,
             animatedValue: new Animated.Value(0),
+            isClosed : false
         }
     }
     //获取背景颜色
@@ -338,7 +338,7 @@ export default class CoverView extends Component {
 
     // 退出时取消动画
     componentWillUnmount() {
-        isClosed = true;
+        this.setState({isClosed: true});
     }
     
     scannerLineMove() {
