@@ -7,9 +7,11 @@ import {
     TextInput,
     StatusBar,
     TouchableHighlight,
-    AsyncStorage 
+    AsyncStorage,
+    Image,
+    TouchableWithoutFeedback
 } from 'react-native';
-import MainPage from './MainPage'
+import MainPage from './MainPage';
 import { StackNavigator,
          NavigationActions } from 'react-navigation';
 import { Sae } from 'react-native-textinput-effects';
@@ -39,7 +41,13 @@ export default class Login extends Component {
         const {logining} = this.state;
         return (
         <View style={styles.container}>
-        <StatusBar backgroundColor={'#008B8B'} />
+            <StatusBar backgroundColor={'#008B8B'} />
+            <TouchableWithoutFeedback onPress={() => this.toTakePhoto()} >
+                <View style={styles.img_facewarpper}>
+                    <Image style={styles.img_face}
+                        source={require('./components/img/face.png')} />
+                </View>
+            </TouchableWithoutFeedback>
             <View style={styles.warpper}>
                 <Sae
                     label={'账 号'}
@@ -65,7 +73,7 @@ export default class Login extends Component {
                 <View style={{height:50}}></View>
 
                 <Button
-                    title='登录'
+                    title='登 录'
                     style={styles.loginBtn}
                     borderRadius={10}
                     fontSize={18}
@@ -75,6 +83,11 @@ export default class Login extends Component {
             <Toast ref="toast"/>
         </View>
     )
+    }
+
+    toTakePhoto() {
+        console.log('toTake');
+        this.props.navigation.navigate('TakePhoto');
     }
 
     fetchLogin = () => {
@@ -185,6 +198,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#008B8B',
 
+    },
+    img_facewarpper: {
+        height: 64,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    img_face: {
+        height: 64,
+        width: 64
     },
     warpper: {
         justifyContent: 'center',

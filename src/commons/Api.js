@@ -3,7 +3,7 @@
  */
 
 
-export const HOST = 'http://10.30.90.212:8000/';
+export const HOST = 'http://10.30.90.16:8000/';
 
 export const BASE_URL = HOST +　'api/v1';
 /*
@@ -12,6 +12,14 @@ export const BASE_URL = HOST +　'api/v1';
  * /auth/login/
  */
 export const LOGIN_BY_PASSWORD = BASE_URL + '/auth/login';
+
+
+/*
+ * 通过人脸登录
+ * method: POST 
+ * /face/auth
+ */
+export const LOGIN_BY_FACE = BASE_URL + '/face/auth';
 
 /**
  * 为一个用户绑定识别码

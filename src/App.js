@@ -16,12 +16,14 @@ import {
 import Login from './Login';
 import MainPage from './MainPage'
 import { StackNavigator } from 'react-navigation';
+import TakePhoto from './components/TakePhoto';
 import QrScanView from './components/QrScanView';
 
 
 export default App = StackNavigator({
   Login: { screen: Login},
   MainPage: { screen: MainPage},
+  TakePhoto: {screen: TakePhoto},
   QrScanView: {screen: QrScanView}
   
 });

@@ -13,6 +13,9 @@ import {
 import { StackNavigator,
   NavigationActions } from 'react-navigation';
 import QrScanView from './QrScanView';
+
+
+
 export default class TitleBar extends Component {
   constructor(props) {
     super(props);
@@ -36,10 +39,10 @@ export default class TitleBar extends Component {
       <View style={styles.container}>
         <StatusBar backgroundColor={'#008B8B'} />
         
-        <View style={styles.qr_warpper}>
+        {/* <View style={styles.qr_warpper}>
           <Image style={styles.img_style}
                 source={require('./img/block.png')} />
-        </View>
+        </View> */}
         <View style={styles.text_warpper}>
         <Text style={{fontSize: 20, color: '#fff', paddingBottom: 10}}>{this.props.title}</Text>
         </View>
