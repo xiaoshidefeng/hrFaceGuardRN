@@ -107,7 +107,7 @@ export default class Me extends Component {
   render() {
     return (
         <View>
-            <TitleBar title="我"></TitleBar>
+            <TitleBar title="我" navigation={this.props.navigation}></TitleBar>
             <Head></Head>
             <SetList></SetList>
         </View>

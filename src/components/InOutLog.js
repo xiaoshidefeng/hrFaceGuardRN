@@ -215,7 +215,7 @@ export default class InOutLog extends Component {
   render() {
     return (
       <View style={styles.cover}>
-      <TitleBar title="进出情况" ></TitleBar>
+      <TitleBar title="进出情况" navigation={this.props.navigation}></TitleBar>
       <View style={styles.container}>
         <Timeline
           style={styles.list}

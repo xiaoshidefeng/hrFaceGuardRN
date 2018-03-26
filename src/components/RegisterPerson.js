@@ -13,7 +13,7 @@ export default class RegisterPerson extends Component {
   render() {
     return (
       <View>
-        <TitleBar title="注册成员"></TitleBar>
+        <TitleBar title="注册成员" navigation={this.props.navigation}></TitleBar>
         <Text>RegisterPerson</Text>
       </View>
     );

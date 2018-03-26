@@ -16,9 +16,12 @@ import {
 import Login from './Login';
 import MainPage from './MainPage'
 import { StackNavigator } from 'react-navigation';
+import QrScanView from './components/QrScanView';
 
 
 export default App = StackNavigator({
   Login: { screen: Login},
-  MainPage: { screen: MainPage}
+  MainPage: { screen: MainPage},
+  QrScanView: {screen: QrScanView}
+  
 });

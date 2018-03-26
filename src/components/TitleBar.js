@@ -5,10 +5,32 @@ import {
   Text,
   View,
   StatusBar,
-  Image
+  Image,
+  AppRegistry,
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native';
-
+import { StackNavigator,
+  NavigationActions } from 'react-navigation';
+import QrScanView from './QrScanView';
 export default class TitleBar extends Component {
+  constructor(props) {
+    super(props);
+  }
+  toQrScan() {
+    // resetActions = NavigationActions.reset({
+    //     index: 1,
+    //     actions: [NavigationActions.navigate({routeName: 'QrScanView'})]
+    // });
+    // this.props.navigation('Login');
+    console.log('click1');
+    
+    this.props.navigation.navigate('QrScanView'); 
+    // this.props.navigation.navigate('resetActions');
+    console.log('click');
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -21,10 +43,14 @@ export default class TitleBar extends Component {
         <View style={styles.text_warpper}>
         <Text style={{fontSize: 20, color: '#fff', paddingBottom: 10}}>{this.props.title}</Text>
         </View>
-        <View style={styles.qr_warpper}>
-          <Image style={styles.img_style}
-                source={require('./img/qrscan.png')} />
-        </View>
+        <TouchableWithoutFeedback onPress={() => this.toQrScan()}>
+          <View style={styles.qr_warpper}>
+            <Image style={styles.img_style}
+                  source={require('./img/qrscan.png')}
+                  />
+          </View>
+        </TouchableWithoutFeedback>
+
       </View>   
     );
   }
@@ -51,3 +77,11 @@ const styles = StyleSheet.create({
     }
 
 })
+
+// const QrStack = StackNavigator({
+//   QrScanView: { screen: QrScanView },
+//   TitleBar: { screen: TitleBar }
+  
+// });
+
+// AppRegistry.registerComponent('QrStack', () => App);

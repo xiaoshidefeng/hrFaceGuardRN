@@ -27,6 +27,7 @@ function px2dp(px) {
 export default class MainPage extends Component {
     constructor(props) {
         super(props);
+        navigation = this.props.navigation;  
     }
     state= {
         selectedTab: 'ConfirmCode',
@@ -58,7 +59,7 @@ export default class MainPage extends Component {
                   renderIcon={() => <Icon name={'key'} size={px2dp(22)} color="#666" />}
                   renderSelectedIcon={() => <Icon name={'key'} size={px2dp(22)} color="#3496f0"/>}
                   onPress={() => this.setState({selectedTab: 'ConfirmCode'})}>
-                <ConfirmCode/>
+                <ConfirmCode navigation={this.props.navigation}/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'InOutLog'}
@@ -68,7 +69,7 @@ export default class MainPage extends Component {
                   renderIcon={() => <Icon name="eye" size={px2dp(22)} color="#666"/>}
                   renderSelectedIcon={() => <Icon name="eye" size={px2dp(22)} color="#3496f0"/>}
                   onPress={() => this.setState({selectedTab: 'InOutLog'})}>
-                <InOutLog/>
+                <InOutLog navigation={this.props.navigation}/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'RegisterPerson'}
@@ -77,7 +78,7 @@ export default class MainPage extends Component {
                   renderIcon={() => <Icon name="users" size={px2dp(22)} color="#666"/>}
                   renderSelectedIcon={() => <Icon name="users" size={px2dp(22)} color="#3496f0"/>}
                   onPress={() => this.setState({selectedTab: 'RegisterPerson'})}>
-                <RegisterPerson/>
+                <RegisterPerson navigation={this.props.navigation}/>
                 </TabNavigator.Item>
                 <TabNavigator.Item
                   selected={this.state.selectedTab === 'Me'}
@@ -86,7 +87,7 @@ export default class MainPage extends Component {
                   renderIcon={() => <Icon name="user" size={px2dp(22)} color="#666"/>}
                   renderSelectedIcon={() => <Icon name="user" size={px2dp(22)} color="#3496f0"/>}
                   onPress={() => this.setState({selectedTab: 'Me'})}>
-                <Me/>
+                <Me navigation={this.props.navigation}/>
                 </TabNavigator.Item>
             </TabNavigator>
             )

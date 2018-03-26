@@ -17,7 +17,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {Button} from 'react-native-elements';
 import { LOGIN_BY_PASSWORD, GET_USER_BY_ID } from './commons/Api';
 import Storage from 'react-native-storage';
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, {DURATION} from 'react-native-easy-toast';
+import QrScanView from './components/QrScanView';
 
 
 export default class Login extends Component {
@@ -108,8 +109,11 @@ export default class Login extends Component {
                     index: 0,
                     actions: [NavigationActions.navigate({routeName: 'MainPage'})]
                 });
+                console.log('123');                
                 this.props.navigation.dispatch(resetActions);
+                
                 return true;
+
             } catch (err) {
                 console.log(err)
                 this.setState({logining: false});
@@ -208,9 +212,10 @@ const styles = StyleSheet.create({
     }
 
 })
-const loginStack = StackNavigator({
-    Login: { screen: Login },
-    MainPage: {screen: MainPage}
-  });
+// const loginStack = StackNavigator({
+//     Login: { screen: Login },
+//     MainPage: {screen: MainPage},
+//     QrScanView: {screen: QrScanView}
+//   });
   
-AppRegistry.registerComponent('loginStack', () => App);
+// AppRegistry.registerComponent('loginStack', () => App);

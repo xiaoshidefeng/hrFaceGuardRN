@@ -11,7 +11,10 @@ import CodeInput from 'react-native-confirmation-code-input';
 import { Button } from 'react-native-elements';
 
 export default class ConfirmCode extends Component {
-
+  constructor(props){  
+    super(props);  
+    navigation = this.props.navigation;  
+}  
 
   permit() {
 
@@ -24,13 +27,11 @@ export default class ConfirmCode extends Component {
   render() {
     return (    
       <View style={styles.container}>
-        <TitleBar title="验证码"></TitleBar>
+        <TitleBar title="验证码" navigation={this.props.navigation}></TitleBar>
         <View style={{height: 80}}></View>
         <CodeInput
           ref="codeInputRef2"
           keyboardType="numeric"
-          // activeColor='rgba(255, 255, 255, 1)'
-          // inactiveColor='rgba(255, 255, 255, 1)'
           activeColor='rgba(49, 180, 4, 1)'
           inactiveColor='rgba(49, 180, 4, 0.6)'
           autoFocus={false}
