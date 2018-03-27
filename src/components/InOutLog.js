@@ -11,7 +11,10 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Button,
-  TextInput
+  TextInput,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  
   
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -26,6 +29,9 @@ import PopupDialog,
   ScaleAnimation,  
   DialogTitle,
   DialogButton, } from 'react-native-popup-dialog';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+
+
 
 const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
 const scaleAnimation = new ScaleAnimation();
@@ -61,7 +67,11 @@ export default class InOutLog extends Component {
     isRefreshing: false,      
     waiting: false,
     dialogShow: false,
-    nick_name: 'tom'
+    nick_name: 'tom',
+    isDateTimePickerVisible: false,
+    isBeginTime: true,
+    beginTime: '',
+    endTime: '',
   }
 
   componentWillMount() {
@@ -120,16 +130,20 @@ export default class InOutLog extends Component {
             }); 
             const data = await resC.json();
             var logList = data.data;
-
+            let length = logList.length;
+            if (length == 0) {
+              this.setState({isRefreshing: false});
+              this.setState({waiting: false}); 
+              return;
+            }
             // bug 在这里
             var lists = '[';
-            lists[0].name = "123";
             console.log('lists');
-            lists = lists + "{ \"" + "time" + "\":" + "\"" + logList[0].visit_time + "\" , ";
-            lists = lists + "\"" + "title" + "\":" + "\"" + logList[0].nickname + "\" , "; 
-            lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[0].pic + "\","; 
-            lists = lists + "\"" + "description" + "\":" + "\"" + logList[0].result + "\"";
-            if (logList[0].result == '通过') {
+            lists = lists + "{ \"" + "time" + "\":" + "\"" + logList[length - 1].visit_time + "\" , ";
+            lists = lists + "\"" + "title" + "\":" + "\"" + logList[length - 1].nickname + "\" , "; 
+            lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[length - 1].pic + "\","; 
+            lists = lists + "\"" + "description" + "\":" + "\"" + logList[length - 1].result + "\"";
+            if (logList[length - 1].result == '通过') {
               lists = lists + " , \"" + "circleColor" + "\":" + "\"" + "#00BFFF" + "\" , ";
               lists = lists + "\"" + "lineColor" + "\":" + "\"" + "#00BFFF" + "\"";             
             } else {
@@ -137,7 +151,7 @@ export default class InOutLog extends Component {
               lists = lists + "\"" + "lineColor" + "\":" + "\"" + "#FF4500" + "\"";    
             }
             lists = lists +　" }"
-            for (var i = 1, l = logList.length; i < l; i++) {
+            for (var i = length - 2 ; i >= 0; i--) {
               lists = lists + ",{ \"" + "time" + "\":" + "\"" + logList[i].visit_time + "\" , ";
               lists = lists + "\"" + "title" + "\":" + "\"" + logList[i].nickname + "\" , "; 
               lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[i].pic + "\" , ";
@@ -236,6 +250,32 @@ export default class InOutLog extends Component {
     
   }
 
+  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+
+  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+
+  _handleDatePicked = date => {
+    console.log("A date has been picked: ", this.formatDate(date));
+    if (this.state.isBeginTime) {
+      console.log('is begin time');
+      this.setState({beginTime: this.formatDate(date)});
+    } else if (!this.state.isBeginTime) {
+      console.log('is end time');
+      this.setState({endTime: this.formatDate(date)});      
+    }
+    console.log('begin time' + this.state.beginTime + 'end time' + this.state.endTime);
+    this._hideDateTimePicker();
+  };
+
+  formatDate(date) {
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? '0' + m : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    return y + '-' + m + '-' + d;  
+  }
+
   render() {
     return (
       <View style={styles.cover}>
@@ -267,18 +307,23 @@ export default class InOutLog extends Component {
           onEventPress={(event) => {this.clickItem(event)}}
           detailContainerStyle={{marginBottom: 20, paddingLeft: 5, paddingRight: 5, backgroundColor: "#BBDAFF", borderRadius: 10}}
         />
-
+        <View >
+          <DateTimePicker
+            isVisible={this.state.isDateTimePickerVisible}
+            onConfirm={this._handleDatePicked}
+            onCancel={this._hideDateTimePicker}
+          />
+        </View>
         <PopupDialog
           ref={(popupDialog) => {
             this.scaleAnimationDialog = popupDialog;
           }}
           dialogAnimation={scaleAnimation}
-          dialogTitle={<DialogTitle title="Popup Dialog - Scale Animation" />}
+          dialogTitle={<DialogTitle title="修改人员信息" />}
           actions={[
             <View style={styles.dia_btn_warpper}> 
             <DialogButton
-              text="绑定"
-              align="left"     
+              text="绑定" 
               buttonStyle={styles.dia_btn}                              
               onPress={() => {
                 this.scaleAnimationDialog.dismiss();
@@ -286,8 +331,7 @@ export default class InOutLog extends Component {
               key="button-1"
             />
             <DialogButton
-              text="关闭"
-              align="right"   
+              text="关闭" 
               buttonStyle={styles.dia_btn}             
               onPress={() => {
                 this.scaleAnimationDialog.dismiss();
@@ -306,6 +350,32 @@ export default class InOutLog extends Component {
                 value={this.state.nick_name}
               />
             </View>
+            <View style={styles.input_warpper}>
+              <Text style={styles.input_lable}>授权开始时间</Text>
+              <TouchableOpacity style={styles.tb_warpper} onPress={() => {
+                this.setState({isBeginTime: true});                
+                this.setState({isDateTimePickerVisible: true});
+              }}>
+                <Text style={styles.time_lable}>{this.state.beginTime}</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.input_warpper}>
+              <Text style={styles.input_lable}>授权截止时间</Text>
+              <TouchableOpacity style={styles.tb_warpper}  onPress={() => {
+                this.setState({isBeginTime: false});                                
+                this.setState({isDateTimePickerVisible: true});
+              }}>
+                <Text style={styles.time_lable}>{this.state.endTime}</Text>
+              </TouchableOpacity>
+            </View>
+            <Button
+              title='选择时间段'
+              borderRadius={10}
+              fontSize={18}
+              onPress={() => {
+                this.setState({isDateTimePickerVisible: true});
+              }}
+            />
           </View>
         </PopupDialog>
 
@@ -313,7 +383,6 @@ export default class InOutLog extends Component {
       </View>
       </View>
 
-           
     );
   }
 }
@@ -343,6 +412,17 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     justifyContent: 'center',
     
+  },
+  tb_warpper: {
+    flex: 1
+  },
+  time_lable: {
+    // flex: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    fontSize: 18,
+    justifyContent: 'center',
+    textAlign:'center',
   },
   dia_btn_warpper: {
     flexDirection: 'row',

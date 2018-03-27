@@ -3,7 +3,11 @@ import {
     AppRegistry,
     StyleSheet,
     Text,
-    View
+    View,
+    Platform,
+    BackHandler,
+    AppState,
+    ToastAndroid
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import TabNavigator from 'react-native-tab-navigator';
@@ -18,6 +22,8 @@ import {TAB_SELECT_COLOR} from './commons/ColorUtil';
 const deviceW = Dimensions.get('window').width
 
 const basePx = 375
+
+const lastBackPressed = Date.now();
 
 function px2dp(px) {
   return px *  deviceW / basePx
@@ -45,9 +51,41 @@ export default class MainPage extends Component {
         this.fetchUserInfo();
     }
 
+    componentDidMount() {
+        if(Platform.OS === 'android') BackHandler.addEventListener('hardwareBackPress', this._onBackPressed);
+        AppState.addEventListener('change', this._onAppStateChanged);
+    }
+
+    componentWillUnmount() {
+        if(Platform.OS === 'android') BackHandler.removeEventListener('hardwareBackPress', this._onBackPressed);
+        AppState.removeEventListener('change', this._onAppStateChanged);
+    }
+
     fetchUserInfo() {
 
     };
+
+    _onBackPressed() {
+        if (lastBackPressed && lastBackPressed + 2000 >= Date.now()) {
+            BackHandler.exitApp();
+          }
+          lastBackPressed = Date.now();
+          ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+          return true;
+    }
+
+    _onAppStateChanged() {
+    switch (AppState.currentState) {
+        case "active":
+        console.log("active");
+        break;
+        case "background":
+        console.log("background");
+        break;
+        default:
+
+    }
+    }
 
     render() {
         return (

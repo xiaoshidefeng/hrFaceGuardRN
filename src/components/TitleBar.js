@@ -8,7 +8,8 @@ import {
   Image,
   AppRegistry,
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  TouchableNativeFeedback
 } from 'react-native';
 import { StackNavigator,
   NavigationActions } from 'react-navigation';
@@ -46,13 +47,13 @@ export default class TitleBar extends Component {
         <View style={styles.text_warpper}>
         <Text style={{fontSize: 20, color: '#fff', paddingBottom: 10}}>{this.props.title}</Text>
         </View>
-        <TouchableWithoutFeedback onPress={() => this.toQrScan()}>
+        <TouchableNativeFeedback  onPress={() => this.toQrScan()}>
           <View style={styles.qr_warpper}>
             <Image style={styles.img_style}
                   source={require('./img/qrscan.png')}
                   />
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableNativeFeedback>
 
       </View>   
     );
