@@ -30,7 +30,7 @@ import PopupDialog,
   DialogTitle,
   DialogButton, } from 'react-native-popup-dialog';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-
+import {CheckBox} from 'react-native-elements';
 
 
 const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
@@ -72,6 +72,7 @@ export default class InOutLog extends Component {
     isBeginTime: true,
     beginTime: '',
     endTime: '',
+    isShowPeopleDate: false,
   }
 
   componentWillMount() {
@@ -276,6 +277,35 @@ export default class InOutLog extends Component {
     return y + '-' + m + '-' + d;  
   }
 
+  _showTimeBetween() {
+    if (this.state.isShowPeopleDate) {
+      return(
+        <View>
+          <View style={styles.input_warpper}>
+            <Text style={styles.input_lable}>授权开始时间</Text>
+            <TouchableOpacity style={styles.tb_warpper} onPress={() => {
+              this.setState({isBeginTime: true});                
+              this.setState({isDateTimePickerVisible: true});
+            }}>
+              <Text style={styles.time_lable}>{this.state.beginTime}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.input_warpper}>
+            <Text style={styles.input_lable}>授权截止时间</Text>
+            <TouchableOpacity style={styles.tb_warpper}  onPress={() => {
+              this.setState({isBeginTime: false});                                
+              this.setState({isDateTimePickerVisible: true});
+            }}>
+              <Text style={styles.time_lable}>{this.state.endTime}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <View style={styles.cover}>
@@ -350,32 +380,14 @@ export default class InOutLog extends Component {
                 value={this.state.nick_name}
               />
             </View>
-            <View style={styles.input_warpper}>
-              <Text style={styles.input_lable}>授权开始时间</Text>
-              <TouchableOpacity style={styles.tb_warpper} onPress={() => {
-                this.setState({isBeginTime: true});                
-                this.setState({isDateTimePickerVisible: true});
-              }}>
-                <Text style={styles.time_lable}>{this.state.beginTime}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.input_warpper}>
-              <Text style={styles.input_lable}>授权截止时间</Text>
-              <TouchableOpacity style={styles.tb_warpper}  onPress={() => {
-                this.setState({isBeginTime: false});                                
-                this.setState({isDateTimePickerVisible: true});
-              }}>
-                <Text style={styles.time_lable}>{this.state.endTime}</Text>
-              </TouchableOpacity>
-            </View>
-            <Button
-              title='选择时间段'
-              borderRadius={10}
-              fontSize={18}
+            <CheckBox
+              title='授权时间段'
+              checked={this.state.isShowPeopleDate}
               onPress={() => {
-                this.setState({isDateTimePickerVisible: true});
+                this.setState({isShowPeopleDate: !this.state.isShowPeopleDate});
               }}
             />
+            {this._showTimeBetween()}
           </View>
         </PopupDialog>
 
