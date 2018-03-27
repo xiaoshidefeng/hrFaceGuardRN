@@ -3,12 +3,21 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Image
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import TitleBar from './TitleBar';
 import CodeInput from 'react-native-confirmation-code-input';
 import { Button } from 'react-native-elements';
+import {GET_IMG_BY_CODE, BASE_URL} from '../commons/Api';
+import PopupDialog, 
+{ SlideAnimation,
+  ScaleAnimation,  
+  DialogTitle,
+  DialogButton, } from 'react-native-popup-dialog';
+const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
+const scaleAnimation = new ScaleAnimation();
 
 export default class ConfirmCode extends Component {
   constructor(props){  
@@ -16,19 +25,54 @@ export default class ConfirmCode extends Component {
     navigation = this.props.navigation;  
 }  
 
+  state =  {
+    imgurl: "./img/head.jpg",
+    dialogShow: false,
+    
+  }
+
   permit() {
 
   }
-
-  checkNumberLegal() {
-
+  showScaleAnimationDialog() {
+    this.scaleAnimationDialog.show();
   }
+  checkNumberLegal(isValid) {
+    // console.log(isValid);
+    this.toFetchImg(isValid);
+  }
+  toFetchImg(isValid) {
+    console.log(isValid);
+    
+    (async () => {
+      try {
+          console.log(GET_IMG_BY_CODE + isValid);                
+          
+          const resC = await fetch(GET_IMG_BY_CODE + isValid);
+          
+          const data = await resC.json();
+          if (data.success) {
+            this.setState({imgurl: BASE_URL + "/" + data.data.pic});
+            console.log('111111' + BASE_URL + "/" + data.data.pic);                
+            
+          }
+          
+          return true;
+
+      } catch (err) {
+          console.log(err)
+          this.setState({logining: false});
+          this.refs.toast.show('登录失败 请检查账号密码');
+      }
+  })();
+  }
+
 
   render() {
     return (    
       <View style={styles.container}>
         <TitleBar title="验证码" navigation={this.props.navigation}></TitleBar>
-        <View style={{height: 80}}></View>
+        <View style={{flex: 1}}>
         <CodeInput
           ref="codeInputRef2"
           keyboardType="numeric"
@@ -43,13 +87,53 @@ export default class ConfirmCode extends Component {
           containerStyle={{ marginTop: 30 }}
           codeInputStyle={{ borderWidth: 1.5 }}
         />
-        <Button
-          title='暂时授权'
-          style={styles.ConfirmBtn}
-          borderRadius={10}
-          fontSize={18}
-          // loading={logining}
-          onPress={() => this.permit()} /> 
+        </View>
+        <View style={{flex: 1}}>
+            <Button
+              title='暂时授权'
+              style={styles.ConfirmBtn}
+              borderRadius={100}
+              fontSize={18}
+              // loading={logining}
+              onPress={() => {
+                this.showScaleAnimationDialog();
+              }} /> 
+        
+        </View>
+
+        <PopupDialog
+          ref={(popupDialog) => {
+            this.scaleAnimationDialog = popupDialog;
+          }}
+          dialogAnimation={scaleAnimation}
+          dialogTitle={<DialogTitle title="查看来访人员信息" />}
+          actions={[
+            <View style={styles.dia_btn_warpper}> 
+            <DialogButton
+              text="确认" 
+              buttonStyle={styles.dia_btn}                              
+              onPress={() => {
+                this.scaleAnimationDialog.dismiss();
+              }}
+              key="button-1"
+            />
+            <DialogButton
+              text="关闭" 
+              buttonStyle={styles.dia_btn}             
+              onPress={() => {
+                this.scaleAnimationDialog.dismiss();
+              }}
+              key="button-2"
+            />
+            </View>
+          ]}
+        >
+          <View style={styles.person_warpper}>
+            <Image 
+              style={styles.person_img}
+              source={{uri: this.state.imgurl}}/>
+          </View>
+        </PopupDialog>
       </View>  
        
     );
@@ -65,9 +149,30 @@ const styles = StyleSheet.create({
     
   },
   ConfirmBtn: {
-    marginTop: 50,
     backgroundColor:  '#009C92',
-    paddingBottom: 30
+    width: 60
+    
+  },
+  dia_btn_warpper: {
+    flexDirection: 'row',
+  },
+  dia_btn:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
+    
+  } ,  
+  person_warpper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  person_img: {
+    // flex: 1,    
+    width: 100,
+    height: 120,
+    
   }
 
 })

@@ -99,3 +99,10 @@ export const UPDATE_USER = BASE_URL + '/users/';
  */
 export const GET_USER_IN_OUT_LOG = BASE_URL + '/users/';
 
+/**
+ * 通过识别码获取图像
+ * method: GET
+ * /user_code_pic/1234
+ */
+export const GET_IMG_BY_CODE = BASE_URL + '/user_code_pic/';
+
