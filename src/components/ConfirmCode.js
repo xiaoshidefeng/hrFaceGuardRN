@@ -32,7 +32,7 @@ export default class ConfirmCode extends Component {
   }
 
   permit() {
-
+    console.log('permit');
   }
   showScaleAnimationDialog() {
     this.scaleAnimationDialog.show();
@@ -108,7 +108,8 @@ export default class ConfirmCode extends Component {
           dialogAnimation={scaleAnimation}
           dialogTitle={<DialogTitle title="查看来访人员信息" />}
           actions={[
-            <View style={styles.dia_btn_warpper}> 
+            <View style={styles.dia_btn_warpper}
+            key="view-1"> 
             <DialogButton
               text="确认" 
               buttonStyle={styles.dia_btn}                              

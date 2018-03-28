@@ -14,27 +14,121 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableNativeFeedback,
-  
-  
+  CheckBox
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-// import { List, ListItem } from 'react-native-elements';
 import {GET_IN_OUT_LOG_BY_ADDRESS,BASE_URL} from '../commons/Api';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import Storage from 'react-native-storage';
 import Timeline from 'react-native-timeline-listview';
 import TitleBar from './TitleBar';
 import PopupDialog, 
-{ SlideAnimation,
-  ScaleAnimation,  
-  DialogTitle,
-  DialogButton, } from 'react-native-popup-dialog';
+      { SlideAnimation,
+        ScaleAnimation,  
+        DialogTitle,
+        DialogButton, } from 'react-native-popup-dialog';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import {CheckBox} from 'react-native-elements';
-
+import Collapsible from 'react-native-collapsible';
+import Accordion from 'react-native-collapsible/Accordion';
+import { ActionSheetCustom as ActionSheet } from 'react-native-custom-actionsheet'
+// import {weekData} from './data/WeekData';
 
 const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
 const scaleAnimation = new ScaleAnimation();
+
+const SECTIONS = [
+  {
+    title: 'First',
+    content: 'Lorem ipsum...'
+  }
+];
+const CANCEL_INDEX = 0
+const DESTRUCTIVE_INDEX = 4
+
+export const weekDatas = [
+  '取消',
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>全选</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期一</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期二</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期三</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期四</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期五</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期六</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+  {
+      component: 
+      <View style={{flexDirection: 'row', }}>
+          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期天</Text>
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <CheckBox ></CheckBox>
+          </View>
+      </View> ,
+      height: 36,
+  },
+];
+
 
 export default class InOutLog extends Component {
   constructor(props) {
@@ -42,25 +136,14 @@ export default class InOutLog extends Component {
     this.onEndReached = this.onEndReached.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this.data = [
-      {time: '09:00', title: 'Event 1', description: 'Event 1 Description'},
-      {time: '10:45', title: 'Event 2', description: 'Event 2 Description'},
-      {time: '12:00', title: 'Event 3', description: 'Event 3 Description'},
-      {time: '14:00', title: 'Event 4', description: 'Event 4 Description'},
-      {time: '16:30', title: 'Event 5', description: 'Event 5 Description'},
-      {time: '09:00', title: 'Event 1', description: 'Event 1 Description'},
-      {time: '10:45', title: 'Event 2', description: 'Event 2 Description'},
-      {time: '12:00', title: 'Event 3', description: 'Event 3 Description'},
-      {time: '14:00', title: 'Event 4', description: 'Event 4 Description'},
-      {time: '16:30', title: 'Event 5', description: 'Event 5 Description'},
-      {time: '09:00', title: 'Event 1', description: 'Event 1 Description'},
-      {time: '10:45', title: 'Event 2', description: 'Event 2 Description'},
-      {time: '12:00', title: 'Event 3', description: 'Event 3 Description'},
-      {time: '14:00', title: 'Event 4', description: 'Event 4 Description'},
-      {time: '16:30', title: 'Event 5', description: 'Event 5 Description'}
-    ]
+    this._renderHeader = this._renderHeader.bind(this);
+    this._showTimeBetween = this._showTimeBetween.bind(this);
+    this._renderContent = this._renderContent.bind(this);
+    this.data = [];
+    // this.
   }
   state = {
+    days: [false, false, false, false, false, false, false, false],
     userid: 1,
     list: [],
     token: '',
@@ -73,7 +156,110 @@ export default class InOutLog extends Component {
     beginTime: '',
     endTime: '',
     isShowPeopleDate: false,
+    // weekData : [
+    //   '取消',
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>全选</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //               <CheckBox value={this.state.days[0]}
+    //               onValueChange={() => {
+    //                 var temp = this.state.days;
+    //                 temp[0] = !temp[0];
+    //                 this.setState({days: temp});
+    //                 console.log(this.state.days[0]);
+    //                 // this.state.days[0] =  !this.state.days[0];
+    //                 // console.log(this.state.days[0]);
+                    
+    //               }}/>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期一</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <CheckBox value={this.state.days[1]}></CheckBox>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期二</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <CheckBox value={this.state.days[2]}></CheckBox>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期三</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <CheckBox value={this.state.days[3]}></CheckBox>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期四</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <CheckBox value={this.state.days[4]}></CheckBox>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期五</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <CheckBox value={this.state.days[5]}></CheckBox>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期六</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <CheckBox value={this.state.days[6]}></CheckBox>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    //   {
+    //       component: 
+    //       <View style={{flexDirection: 'row', }}>
+    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期天</Text>
+    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    //           <CheckBox value={this.state.days[7]}></CheckBox>
+    //           </View>
+    //       </View> ,
+    //       height: 36,
+    //   },
+    // ],
   }
+
+  // ActionSheetCustom
+  showActionSheet = () => this.actionSheet.show()
+
+  getActionSheetRef = ref => (this.actionSheet = ref)
+
+  // handlePress = index => {
+  //   // this.setState({ selected: index });
+  //   console.log(index);
+  // }
+  // ActionSheetCustom
 
   componentWillMount() {
     
@@ -113,11 +299,11 @@ export default class InOutLog extends Component {
   }
 
   renderFooter() {
-    if (this.state.waiting) {
-        return <ActivityIndicator />;
-    } else {
+    // if (this.state.waiting) {
+    //     return <ActivityIndicator />;
+    // } else {
         return <Text>~</Text>;
-    }
+    // }
   }
 
   fetchInOutList = () => {
@@ -219,6 +405,33 @@ export default class InOutLog extends Component {
     })
   }
 
+  // 日期选择
+  _renderHeader(section) {
+    return (
+      <View >
+        {/* <CheckBox
+          title={section.title}
+          checked={this.state.isShowPeopleDate}
+          // onPress={() => {
+          //   this.setState({isShowPeopleDate: !this.state.isShowPeopleDate});
+          // }}
+        /> */}
+        {/* <Button title={section.title}></Button> */}
+        <Text style={styles.time_lable}>授权时间选择</Text>
+      </View>
+    );
+  }
+
+  _renderContent(section) {
+    return (
+      <View>
+        {this._showTimeBetween()}
+      </View>
+    );
+  }
+  ///
+
+
   renderDetail(rowData, sectionID, rowID) {
     let title = <Text style={[styles.title]}>{rowData.title}</Text>
     var desc = null
@@ -278,7 +491,7 @@ export default class InOutLog extends Component {
   }
 
   _showTimeBetween() {
-    if (this.state.isShowPeopleDate) {
+    // if (this.state.isShowPeopleDate) {
       return(
         <View>
           <View style={styles.input_warpper}>
@@ -299,12 +512,125 @@ export default class InOutLog extends Component {
               <Text style={styles.time_lable}>{this.state.endTime}</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.input_warpper}>
+            <Text style={styles.input_lable} onPress={() => {
+              this.popupDialog.show(() => {
+                console.log('callback - will be called immediately')
+              });
+            }}>星期选择</Text>
+            
+          </View>
+          
         </View>
       )
-    } else {
-      return null;
-    }
+    // } else {
+      // return null;
+    // }
   }
+
+  _renderWeekSelect() {
+    return(
+      <View>
+  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>全选</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <CheckBox value={this.state.days[0]}
+        onValueChange={() => {
+          var temp = this.state.days;
+          temp[0] = !temp[0];
+          this.setState({days: temp});
+          console.log(this.state.days[0]);
+        }}/>
+      </View>
+  </View>
+  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期一</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <CheckBox value={this.state.days[1]}
+        onValueChange={() => {
+          var temp = this.state.days;
+          temp[1] = !temp[1];
+          this.setState({days: temp});
+          console.log(this.state.days[1]);
+        }}/>
+      </View>
+  </View>
+  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期二</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <CheckBox value={this.state.days[2]}
+        onValueChange={() => {
+          var temp = this.state.days;
+          temp[2] = !temp[2];
+          this.setState({days: temp});
+          console.log(this.state.days[2]);
+        }}/>
+      </View>
+  </View>
+  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期三</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <CheckBox value={this.state.days[3]}
+        onValueChange={() => {
+          var temp = this.state.days;
+          temp[3] = !temp[3];
+          this.setState({days: temp});
+          console.log(this.state.days[3]);
+        }}/>
+      </View>
+  </View>
+  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期四</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <CheckBox value={this.state.days[4]}
+        onValueChange={() => {
+          var temp = this.state.days;
+          temp[4] = !temp[4];
+          this.setState({days: temp});
+          console.log(this.state.days[4]);
+        }}/>
+      </View>
+  </View>
+  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期五</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <CheckBox value={this.state.days[5]}
+        onValueChange={() => {
+          var temp = this.state.days;
+          temp[5] = !temp[5];
+          this.setState({days: temp});
+          console.log(this.state.days[5]);
+        }}/>
+      </View>
+  </View>
+  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+       <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期六</Text>
+       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+         <CheckBox value={this.state.days[6]}
+         onValueChange={() => {
+           var temp = this.state.days;
+           temp[6] = !temp[6];
+           this.setState({days: temp});
+           console.log(this.state.days[6]);
+         }}/>
+       </View>
+   </View>
+   <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
+       <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期天</Text>
+       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+         <CheckBox value={this.state.days[7]}
+         onValueChange={() => {
+           var temp = this.state.days;
+           temp[7] = !temp[7];
+           this.setState({days: temp});
+           console.log(this.state.days[7]);
+         }}/>
+       </View>
+   </View>
+   </View>
+    )
+  }
+
 
   render() {
     return (
@@ -338,20 +664,24 @@ export default class InOutLog extends Component {
           detailContainerStyle={{marginBottom: 20, paddingLeft: 5, paddingRight: 5, backgroundColor: "#BBDAFF", borderRadius: 10}}
         />
         <View >
+
           <DateTimePicker
             isVisible={this.state.isDateTimePickerVisible}
             onConfirm={this._handleDatePicked}
             onCancel={this._hideDateTimePicker}
           />
         </View>
+
         <PopupDialog
           ref={(popupDialog) => {
             this.scaleAnimationDialog = popupDialog;
           }}
+          height={0.6}
           dialogAnimation={scaleAnimation}
           dialogTitle={<DialogTitle title="修改人员信息" />}
           actions={[
-            <View style={styles.dia_btn_warpper}> 
+            <View style={styles.dia_btn_warpper}
+              key="view-1"> 
             <DialogButton
               text="绑定" 
               buttonStyle={styles.dia_btn}                              
@@ -380,16 +710,54 @@ export default class InOutLog extends Component {
                 value={this.state.nick_name}
               />
             </View>
-            <CheckBox
-              title='授权时间段'
-              checked={this.state.isShowPeopleDate}
-              onPress={() => {
-                this.setState({isShowPeopleDate: !this.state.isShowPeopleDate});
+            <Accordion
+              sections={SECTIONS}
+              renderHeader={this._renderHeader}
+              renderContent={this._showTimeBetween}
+              underlayColor='#fff'
+              onChange={(index) => {
+                index = false;
               }}
+
             />
-            {this._showTimeBetween()}
+
+            
           </View>
         </PopupDialog>
+
+
+        
+          <PopupDialog
+            ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+            dialogAnimation={slideAnimation}
+            height={0.5}
+            actions={[
+              <View style={styles.dia_btn_warpper}
+                key="view-2"> 
+              <DialogButton
+                text="绑定" 
+                buttonStyle={styles.dia_btn}                              
+                onPress={() => {
+                  this.scaleAnimationDialog.dismiss();
+                }}
+                key="button-3"
+              />
+              <DialogButton
+                text="关闭" 
+                buttonStyle={styles.dia_btn}             
+                onPress={() => {
+                  this.scaleAnimationDialog.dismiss();
+                }}
+                key="button-4"
+              />
+              </View>
+            ]}
+              >
+            <View>
+              {this._renderWeekSelect()}
+            
+            </View>
+          </PopupDialog>
 
       <Toast ref="toast"/>
       </View>
@@ -452,7 +820,7 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    marginTop:20,
+    // marginTop:20,
   },
   title:{
     fontSize:16,
