@@ -17,7 +17,10 @@ import {
   CheckBox
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import {GET_IN_OUT_LOG_BY_ADDRESS,BASE_URL, AUTH_PERMISSIONS_TIME_TO_BIND_USER} from '../commons/Api';
+import {GET_IN_OUT_LOG_BY_ADDRESS,BASE_URL, 
+  AUTH_PERMISSIONS_TIME_TO_BIND_USER,
+  GET_USER_PERMISSION_TIME_BY_ADDRESS,
+  UPDATE_PERMISSION_TIME} from '../commons/Api';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import Storage from 'react-native-storage';
 import Timeline from 'react-native-timeline-listview';
@@ -46,89 +49,6 @@ const SECTIONS = [
 const CANCEL_INDEX = 0
 const DESTRUCTIVE_INDEX = 4
 
-export const weekDatas = [
-  '取消',
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>全选</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期一</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期二</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期三</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期四</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期五</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期六</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-  {
-      component: 
-      <View style={{flexDirection: 'row', }}>
-          <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期天</Text>
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <CheckBox ></CheckBox>
-          </View>
-      </View> ,
-      height: 36,
-  },
-];
 
 
 export default class InOutLog extends Component {
@@ -145,7 +65,7 @@ export default class InOutLog extends Component {
   }
   state = {
     days: [false, false, false, false, false, false, false, false],
-    user_id: '1',
+    user_id: '',
     list: [],
     token: '',
     isRefreshing: false,      
@@ -167,11 +87,6 @@ export default class InOutLog extends Component {
 
   getActionSheetRef = ref => (this.actionSheet = ref)
 
-  // handlePress = index => {
-  //   // this.setState({ selected: index });
-  //   console.log(index);
-  // }
-  // ActionSheetCustom
 
   componentWillMount() {
     
@@ -221,6 +136,7 @@ export default class InOutLog extends Component {
   fetchInOutList = () => {
     (async () => {
         try {        
+          // TODO 更新
             const resC = await fetch(GET_IN_OUT_LOG_BY_ADDRESS + '1' + '/visits', {
               method: 'GET',
               headers: {
@@ -235,16 +151,17 @@ export default class InOutLog extends Component {
               this.setState({waiting: false}); 
               return;
             }
-            // bug 在这里
+            // 转换json
             var lists = '[';
-            console.log('lists');
+            
             lists = lists + "{ \"" + "time" + "\":" + "\"" + logList[length - 1].visit_time + "\" , ";
             lists = lists + "\"" + "title" + "\":" + "\"" + logList[length - 1].nickname + "\" , "; 
             lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[length - 1].pic + "\","; 
             lists = lists + "\"" + "description" + "\":" + "\"" + logList[length - 1].result + "\",";
             lists = lists + "\"" + "description" + "\":" + "\"" + logList[length - 1].result + "\",";
             lists = lists + "\"" + "role_id" + "\":" + "\"" + logList[length - 1].role.id + "\","; 
-            lists = lists + "\"" + "address_id" + "\":" + "\"" + logList[length - 1].address.id + "\",";                                   
+            lists = lists + "\"" + "address_id" + "\":" + "\"" + logList[length - 1].address.id + "\",";
+            lists = lists + "\"" + "user_id" + "\":" + "\"" + logList[length - 1].user_id + "\",";                                                                                  
             lists = lists + "\"" + "role_alias" + "\":" + "\"" + logList[length - 1].role.alias + "\"";
             if (logList[length - 1].result == '通过') {
               lists = lists + " , \"" + "circleColor" + "\":" + "\"" + "#00BFFF" + "\" , ";
@@ -272,11 +189,11 @@ export default class InOutLog extends Component {
               }            
               lists = lists +　" }"
             }
-            console.log(lists);
+            
 
             lists = lists +　"]";
             var jlist = JSON.parse(lists);            
-            console.log(jlist);
+            
             this.setState({isRefreshing: false});
             this.setState({waiting: false});            
             this.setState({list: jlist});
@@ -292,15 +209,10 @@ export default class InOutLog extends Component {
     storage.load({
       key: 'user',
       
-      // autoSync(默认为true)意味着在没有找到数据或数据过期时自动调用相应的sync方法
       autoSync: true,
       
-      // syncInBackground(默认为true)意味着如果数据过期，
-      // 在调用sync方法的同时先返回已经过期的数据。
-      // 设置为false的话，则始终强制返回sync方法提供的最新数据(当然会需要更多等待时间)。
       syncInBackground: true,
-      
-      // 你还可以给sync方法传递额外的参数
+
       syncParams: {
         extraFetchOptions: {
           // 各种参数
@@ -329,14 +241,6 @@ export default class InOutLog extends Component {
   _renderHeader(section) {
     return (
       <View >
-        {/* <CheckBox
-          title={section.title}
-          checked={this.state.isShowPeopleDate}
-          // onPress={() => {
-          //   this.setState({isShowPeopleDate: !this.state.isShowPeopleDate});
-          // }}
-        /> */}
-        {/* <Button title={section.title}></Button> */}
         <Text style={styles.time_lable}>授权时间选择</Text>
       </View>
     );
@@ -377,13 +281,16 @@ export default class InOutLog extends Component {
   clickItem(event) {
     console.log('click item');
     console.log(event);
+    console.log(event.title + "11111111");
 
     this.setState({nick_name: event.title});
     this.setState({role_id: event.role_id});
-    this.setState({role_alias: event.role_alias});
     this.setState({address_id: event.address_id});
+    this.setState({role_alias: event.role_alias});
+    this.setState({user_id: event.user_id});
+    console.log(event.user_id);
     
-
+    this.getUserTimeInfo(event.user_id, event.address_id);
     this.showScaleAnimationDialog();
     
   }
@@ -415,7 +322,6 @@ export default class InOutLog extends Component {
   }
 
   _showTimeBetween() {
-    // if (this.state.isShowPeopleDate) {
       return(
         <View>
           <View style={styles.input_warpper}>
@@ -447,9 +353,6 @@ export default class InOutLog extends Component {
           
         </View>
       )
-    // } else {
-      // return null;
-    // }
   }
 
   _renderWeekSelect() {
@@ -618,19 +521,18 @@ export default class InOutLog extends Component {
     formData.append("user_id", this.state.user_id);
     formData.append("role_id", this.state.role_id);
     formData.append("time", JSON.stringify(JSON.parse(weekFormat)));  
+    formData.append("_method", "PATCH");
+    
     console.log(JSON.stringify(JSON.parse(weekFormat)));
-    console.log(this.state.user_id);
-    console.log(this.state.role_id);
     
     (async () => {
         try {
-          console.log('123');
-            console.log(AUTH_PERMISSIONS_TIME_TO_BIND_USER + this.state.address_id + "/users");                
-            
-            const resC = await fetch(AUTH_PERMISSIONS_TIME_TO_BIND_USER + this.state.address_id + "/users", {
+          var uuri = UPDATE_PERMISSION_TIME + this.state.user_id + "/addresses/" + this.state.address_id;
+          console.log(uuri);                
+            const resC = await fetch(uuri, {
                 method: 'POST',
                 headers: {
-                  'Authorization': this.state.token
+                  'Authorization': this.state.token,
                 },
                 body: formData
             });
@@ -645,6 +547,54 @@ export default class InOutLog extends Component {
         } catch (err) {
             console.log(err)
             this.refs.toast.show('绑定失败');
+        }
+    })();
+  }
+
+  // 获取当前点击用户的配置信息
+  getUserTimeInfo(us_id, ad_id) {
+    (async () => {
+        try {
+          var uuri = GET_USER_PERMISSION_TIME_BY_ADDRESS + us_id + "/addresses/" + ad_id;
+            console.log(uuri);       
+            console.log(this.state.address_id);      
+            const resC = await fetch(uuri, {
+                method: 'GET',
+                headers: {
+                  'Authorization': this.state.token
+                },
+            });
+            
+            const data = await resC.json();
+            var timeInfo = JSON.parse(data.data.time);
+            console.log(timeInfo); 
+            
+            this.setState({beginTime: timeInfo.date[0]});
+            this.setState({endTime: timeInfo.date[1]});
+            var te = timeInfo.week;
+
+            var temp = this.state.days;
+
+            for (var i = 0 ; i <= 7; i++) {
+              temp[i] = false;
+            }
+
+            for (var i = 0; i < te.length; i++) {
+            console.log(i + "for"); 
+              
+              var j = te[i];
+              temp[j] = true;
+            }
+            this.setState({days: temp});
+            console.log(timeInfo); 
+
+
+            
+            return true;
+
+        } catch (err) {
+            console.log(err)
+            this.refs.toast.show('获取信息失败');
         }
     })();
   }
