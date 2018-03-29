@@ -17,7 +17,7 @@ import {
   CheckBox
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import {GET_IN_OUT_LOG_BY_ADDRESS,BASE_URL} from '../commons/Api';
+import {GET_IN_OUT_LOG_BY_ADDRESS,BASE_URL, AUTH_PERMISSIONS_TIME_TO_BIND_USER} from '../commons/Api';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import Storage from 'react-native-storage';
 import Timeline from 'react-native-timeline-listview';
@@ -31,6 +31,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
 import { ActionSheetCustom as ActionSheet } from 'react-native-custom-actionsheet'
+
 // import {weekData} from './data/WeekData';
 
 const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
@@ -144,110 +145,21 @@ export default class InOutLog extends Component {
   }
   state = {
     days: [false, false, false, false, false, false, false, false],
-    userid: 1,
+    user_id: '1',
     list: [],
     token: '',
     isRefreshing: false,      
     waiting: false,
     dialogShow: false,
     nick_name: 'tom',
+    role_id: '',
+    role_alias: '',
+    address_id: '',
     isDateTimePickerVisible: false,
     isBeginTime: true,
-    beginTime: '',
-    endTime: '',
+    beginTime: '点击选择开始时间',
+    endTime: '点击选择结束时间',
     isShowPeopleDate: false,
-    // weekData : [
-    //   '取消',
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>全选</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //               <CheckBox value={this.state.days[0]}
-    //               onValueChange={() => {
-    //                 var temp = this.state.days;
-    //                 temp[0] = !temp[0];
-    //                 this.setState({days: temp});
-    //                 console.log(this.state.days[0]);
-    //                 // this.state.days[0] =  !this.state.days[0];
-    //                 // console.log(this.state.days[0]);
-                    
-    //               }}/>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期一</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //           <CheckBox value={this.state.days[1]}></CheckBox>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期二</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //           <CheckBox value={this.state.days[2]}></CheckBox>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期三</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //           <CheckBox value={this.state.days[3]}></CheckBox>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期四</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //           <CheckBox value={this.state.days[4]}></CheckBox>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期五</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //           <CheckBox value={this.state.days[5]}></CheckBox>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期六</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //           <CheckBox value={this.state.days[6]}></CheckBox>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    //   {
-    //       component: 
-    //       <View style={{flexDirection: 'row', }}>
-    //           <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期天</Text>
-    //           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //           <CheckBox value={this.state.days[7]}></CheckBox>
-    //           </View>
-    //       </View> ,
-    //       height: 36,
-    //   },
-    // ],
   }
 
   // ActionSheetCustom
@@ -329,7 +241,11 @@ export default class InOutLog extends Component {
             lists = lists + "{ \"" + "time" + "\":" + "\"" + logList[length - 1].visit_time + "\" , ";
             lists = lists + "\"" + "title" + "\":" + "\"" + logList[length - 1].nickname + "\" , "; 
             lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[length - 1].pic + "\","; 
-            lists = lists + "\"" + "description" + "\":" + "\"" + logList[length - 1].result + "\"";
+            lists = lists + "\"" + "description" + "\":" + "\"" + logList[length - 1].result + "\",";
+            lists = lists + "\"" + "description" + "\":" + "\"" + logList[length - 1].result + "\",";
+            lists = lists + "\"" + "role_id" + "\":" + "\"" + logList[length - 1].role.id + "\","; 
+            lists = lists + "\"" + "address_id" + "\":" + "\"" + logList[length - 1].address.id + "\",";                                   
+            lists = lists + "\"" + "role_alias" + "\":" + "\"" + logList[length - 1].role.alias + "\"";
             if (logList[length - 1].result == '通过') {
               lists = lists + " , \"" + "circleColor" + "\":" + "\"" + "#00BFFF" + "\" , ";
               lists = lists + "\"" + "lineColor" + "\":" + "\"" + "#00BFFF" + "\"";             
@@ -342,7 +258,11 @@ export default class InOutLog extends Component {
               lists = lists + ",{ \"" + "time" + "\":" + "\"" + logList[i].visit_time + "\" , ";
               lists = lists + "\"" + "title" + "\":" + "\"" + logList[i].nickname + "\" , "; 
               lists = lists + "\"" + "imageUrl" + "\":" + "\"" + BASE_URL + "/" + logList[i].pic + "\" , ";
-              lists = lists + "\"" + "description" + "\":" + "\"" + logList[i].result + "\"";   
+              lists = lists + "\"" + "description" + "\":" + "\"" + logList[i].result + "\",";  
+              lists = lists + "\"" + "user_id" + "\":" + "\"" + logList[i].user_id + "\",";   
+              lists = lists + "\"" + "role_id" + "\":" + "\"" + logList[i].role.id + "\",";
+              lists = lists + "\"" + "address_id" + "\":" + "\"" + logList[i].address.id + "\",";                                             
+              lists = lists + "\"" + "role_alias" + "\":" + "\"" + logList[i].role.alias + "\"";            
               if (logList[i].result == '通过') {
                 lists = lists + ",\"" + "circleColor" + "\":" + "\"" + "#00BFFF" + "\" , ";
                 lists = lists + "\"" + "lineColor" + "\":" + "\"" + "#00BFFF" + "\"  "; 
@@ -459,6 +379,10 @@ export default class InOutLog extends Component {
     console.log(event);
 
     this.setState({nick_name: event.title});
+    this.setState({role_id: event.role_id});
+    this.setState({role_alias: event.role_alias});
+    this.setState({address_id: event.address_id});
+    
 
     this.showScaleAnimationDialog();
     
@@ -538,6 +462,11 @@ export default class InOutLog extends Component {
         onValueChange={() => {
           var temp = this.state.days;
           temp[0] = !temp[0];
+          if (temp[0] == true) {
+            for (var i = 1; i <= 7; i++) {
+              temp[i] = true;
+            }
+          }
           this.setState({days: temp});
           console.log(this.state.days[0]);
         }}/>
@@ -550,6 +479,9 @@ export default class InOutLog extends Component {
         onValueChange={() => {
           var temp = this.state.days;
           temp[1] = !temp[1];
+          if (temp[1] == false) {
+            temp[0] = false;
+          }
           this.setState({days: temp});
           console.log(this.state.days[1]);
         }}/>
@@ -562,6 +494,9 @@ export default class InOutLog extends Component {
         onValueChange={() => {
           var temp = this.state.days;
           temp[2] = !temp[2];
+          if (temp[2] == false) {
+            temp[0] = false;
+          }
           this.setState({days: temp});
           console.log(this.state.days[2]);
         }}/>
@@ -574,6 +509,9 @@ export default class InOutLog extends Component {
         onValueChange={() => {
           var temp = this.state.days;
           temp[3] = !temp[3];
+          if (temp[3] == false) {
+            temp[0] = false;
+          }
           this.setState({days: temp});
           console.log(this.state.days[3]);
         }}/>
@@ -586,6 +524,9 @@ export default class InOutLog extends Component {
         onValueChange={() => {
           var temp = this.state.days;
           temp[4] = !temp[4];
+          if (temp[4] == false) {
+            temp[0] = false;
+          }
           this.setState({days: temp});
           console.log(this.state.days[4]);
         }}/>
@@ -598,6 +539,9 @@ export default class InOutLog extends Component {
         onValueChange={() => {
           var temp = this.state.days;
           temp[5] = !temp[5];
+          if (temp[5] == false) {
+            temp[0] = false;
+          }
           this.setState({days: temp});
           console.log(this.state.days[5]);
         }}/>
@@ -610,6 +554,9 @@ export default class InOutLog extends Component {
          onValueChange={() => {
            var temp = this.state.days;
            temp[6] = !temp[6];
+           if (temp[6] == false) {
+            temp[0] = false;
+          }
            this.setState({days: temp});
            console.log(this.state.days[6]);
          }}/>
@@ -622,6 +569,9 @@ export default class InOutLog extends Component {
          onValueChange={() => {
            var temp = this.state.days;
            temp[7] = !temp[7];
+           if (temp[7] == false) {
+            temp[0] = false;
+          }
            this.setState({days: temp});
            console.log(this.state.days[7]);
          }}/>
@@ -631,6 +581,73 @@ export default class InOutLog extends Component {
     )
   }
 
+  toBindTime() {
+
+    this.toFetchTime();
+  }
+
+  formatWeek() {
+    var week = '{"date": ["';
+    week = week + this.state.beginTime + "\", \"" + this.state.endTime + '"], "week": [';
+    var temp = this.state.days;
+    if (temp[0]) {
+      week = week + "1,2,3,4,5,6,7]}"
+    } else {
+      for (var i = 1; i <= 7 ; i ++) {
+        if (temp[i]) {
+          week = week + i;
+          ++i;
+          for (; i <= 7 ; i ++) {
+            if (temp[i]) {
+              week = week + "," + i;
+            }
+          }
+          break;
+        }
+      }
+      week += "]}";
+    }
+    return week;
+  }
+
+  toFetchTime() {
+    var weekFormat = this.formatWeek();
+    console.log(weekFormat);
+
+    let formData = new FormData();  
+    formData.append("user_id", this.state.user_id);
+    formData.append("role_id", this.state.role_id);
+    formData.append("time", JSON.stringify(JSON.parse(weekFormat)));  
+    console.log(JSON.stringify(JSON.parse(weekFormat)));
+    console.log(this.state.user_id);
+    console.log(this.state.role_id);
+    
+    (async () => {
+        try {
+          console.log('123');
+            console.log(AUTH_PERMISSIONS_TIME_TO_BIND_USER + this.state.address_id + "/users");                
+            
+            const resC = await fetch(AUTH_PERMISSIONS_TIME_TO_BIND_USER + this.state.address_id + "/users", {
+                method: 'POST',
+                headers: {
+                  'Authorization': this.state.token
+                },
+                body: formData
+            });
+            
+            const data = await resC.json();
+            console.log(data);
+            
+            this.scaleAnimationDialog.dismiss();    
+            
+            return true;
+
+        } catch (err) {
+            console.log(err)
+            this.refs.toast.show('绑定失败');
+        }
+    })();
+  }
 
   render() {
     return (
@@ -686,7 +703,7 @@ export default class InOutLog extends Component {
               text="绑定" 
               buttonStyle={styles.dia_btn}                              
               onPress={() => {
-                this.scaleAnimationDialog.dismiss();
+                this.toBindTime();
               }}
               key="button-1"
             />
@@ -730,23 +747,28 @@ export default class InOutLog extends Component {
           <PopupDialog
             ref={(popupDialog) => { this.popupDialog = popupDialog; }}
             dialogAnimation={slideAnimation}
-            height={0.5}
-            actions={[
+            height={0.55}
+            actions={[ 
               <View style={styles.dia_btn_warpper}
                 key="view-2"> 
               <DialogButton
-                text="绑定" 
+                text="确定" 
                 buttonStyle={styles.dia_btn}                              
                 onPress={() => {
-                  this.scaleAnimationDialog.dismiss();
+                  this.popupDialog.dismiss();
                 }}
                 key="button-3"
               />
               <DialogButton
-                text="关闭" 
+                text="取消" 
                 buttonStyle={styles.dia_btn}             
                 onPress={() => {
-                  this.scaleAnimationDialog.dismiss();
+                  this.popupDialog.dismiss();
+                  var temp = this.state.days;
+                  for (var i = 0; i <= 7; i++) {
+                    temp[i] = false;
+                  }
+                  this.setState({days: temp});
                 }}
                 key="button-4"
               />
@@ -810,7 +832,7 @@ const styles = StyleSheet.create({
   dia_btn:{
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   } ,             
   container: {
     flex: 1,
