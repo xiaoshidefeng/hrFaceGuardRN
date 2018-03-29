@@ -3,8 +3,8 @@
  */
 
 
-// export const HOST = 'http://10.30.90.16:8000/';
-export const HOST = 'http://10.210.114.8:8000/';
+// export const HOST = 'http://10.30.90.212:8000/';
+export const HOST = 'http://192.168.137.27:8000/';
 
 export const BASE_URL = HOST +　'api/v1';
 /*

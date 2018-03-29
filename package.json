@@ -26,6 +26,7 @@
     "react-native-modal-dropdown": "^0.6.2",
     "react-native-popup-dialog": "^0.11.46",
     "react-native-storage": "^0.2.2",
+    "react-native-swipe-list-view": "^1.0.6",
     "react-native-tab-navigator": "^0.3.4",
     "react-native-textinput-effects": "^0.4.2",
     "react-native-timeline-listview": "^0.2.3",

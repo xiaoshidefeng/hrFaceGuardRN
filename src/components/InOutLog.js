@@ -792,7 +792,7 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    // marginTop:20,
+    marginTop:10,
   },
   title:{
     fontSize:16,
