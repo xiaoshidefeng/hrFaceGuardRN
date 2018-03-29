@@ -182,9 +182,14 @@ export default class Login extends Component {
      * 登录进入主页面
      */
     loginInMainpage() {
-
+        resetActions = NavigationActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({routeName: 'MainPage'})]
+        });
+        console.log('123');                
+        this.props.navigation.dispatch(resetActions);
         // 这里开始验证
-        this.fetchLogin();
+        // this.fetchLogin();
     }
 
     setLoginName(input) {
