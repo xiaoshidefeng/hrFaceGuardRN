@@ -16,6 +16,7 @@ import PopupDialog,
   ScaleAnimation,  
   DialogTitle,
   DialogButton, } from 'react-native-popup-dialog';
+import JPushModule from 'jpush-react-native';
 const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
 const scaleAnimation = new ScaleAnimation();
 
@@ -28,6 +29,23 @@ export default class ConfirmCode extends Component {
   state =  {
     imgurl: "./img/head.jpg",
     dialogShow: false,
+    
+  }
+
+  // example
+  componentDidMount() {
+    JPushModule.notifyJSDidLoad();
+    JPushModule.addReceiveCustomMsgListener((message) => {
+      this.setState({pushMsg: message});
+    });
+    JPushModule.addReceiveNotificationListener((message) => {
+      console.log("receive notification: " + message);
+    })
+
+  }
+  componentWillUnmount() {
+    JPushModule.removeReceiveCustomMsgListener();
+    JPushModule.removeReceiveNotificationListener();
     
   }
 

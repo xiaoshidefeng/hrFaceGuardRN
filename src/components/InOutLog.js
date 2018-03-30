@@ -136,6 +136,7 @@ export default class InOutLog extends Component {
   fetchInOutList = () => {
     (async () => {
         try {        
+          console.log(GET_IN_OUT_LOG_BY_ADDRESS + '1' + '/visits');
           // TODO 更新
             const resC = await fetch(GET_IN_OUT_LOG_BY_ADDRESS + '1' + '/visits', {
               method: 'GET',
@@ -588,8 +589,6 @@ export default class InOutLog extends Component {
             this.setState({days: temp});
             console.log(timeInfo); 
 
-
-            
             return true;
 
         } catch (err) {

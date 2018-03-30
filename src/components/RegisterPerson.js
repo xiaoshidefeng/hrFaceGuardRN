@@ -10,14 +10,24 @@ import {
 	ListView,
   TouchableOpacity,
 	Image,
-	ScrollView
+	ScrollView,
+	WebView
 } from 'react-native';
 import TitleBar from './TitleBar';
 import { StackNavigator } from 'react-navigation';
 import { SwipeListView, SwipeRow} from 'react-native-swipe-list-view';
-import {AUTH_PERMISSION_TIME_TO_BIND_USER} from '../commons/Api';
+import {AUTH_PERMISSION_TIME_TO_BIND_USER, BASE_URL} from '../commons/Api';
 import { Card, ListItem, Button } from 'react-native-elements'
+import PopupDialog, 
+{ SlideAnimation,
+  ScaleAnimation,  
+  DialogTitle,
+  DialogButton, } from 'react-native-popup-dialog';
+import Accordion from 'react-native-collapsible/Accordion';
 
+
+
+const scaleAnimation = new ScaleAnimation();
 const users = [
 	{
 		 name: 'brynn',
@@ -25,7 +35,12 @@ const users = [
 	}
  ]
 
-
+ const SECTIONS = [
+	{
+	  title: 'First',
+	  content: 'Lorem ipsum...'
+	}
+  ];
 
 export default class RegisterPerson extends Component {
 	constructor(props) {
@@ -49,7 +64,8 @@ export default class RegisterPerson extends Component {
 				name: 'brynn',
 				avatar: './img/head.jpg'
 		 }
-		 ]
+		 ],
+		 itemData: {}
   }
 
   componentDidMount() {
@@ -114,20 +130,21 @@ export default class RegisterPerson extends Component {
   fetchRegisterInfo() {
     (async () => {
       try {
-					// var uuri = AUTH_PERMISSION_TIME_TO_BIND_USER + "1" + "/users";
-					var uuri = "http://192.168.220.2:8081/housePeople.json";
-          console.log(uuri);
-          const resC = await fetch(uuri, {
-              method: 'GET',
-              headers: {
-                'Authorization': this.state.token
-              },
-          });
+		// var uuri = AUTH_PERMISSION_TIME_TO_BIND_USER + "1" + "/users";
+		var uuri = "http://192.168.176.2:8081/housePeople.json";
+		console.log(uuri);
+		const resC = await fetch(uuri, {
+			method: 'GET',
+			headers: {
+			'Authorization': this.state.token
+			},
+		});
           
-          const data = await resC.json();
-          var list = data.data;
-          console.log(data);
-					this.setState({listViewData: list});
+		const data = await resC.json();
+		var list = data.data;
+		console.log(data);
+		console.log(list);		
+		this.setState({listViewData: list});
       } catch (err) {
           console.log(err);
           this.refs.toast.show('获取信息失败');
@@ -135,71 +152,192 @@ export default class RegisterPerson extends Component {
     })();
   }
 
+  showScaleAnimationDialog() {
+    this.scaleAnimationDialog.show();
+  }
+
+  // 点击 item 获取数据
+  showMsg(i) {
+	console.log(this.state.listViewData[i]);
+	this.setState({itemData: this.state.listViewData[i]});
+	this.showScaleAnimationDialog();
+  }
+
 	render() {
+
 		return (
 			<View style={styles.container}>
-					{/* <SwipeListView
-						useFlatList
-						data={this.state.listViewData}
-						renderItem={ (data, rowMap) => (
-							<TouchableHighlight
-								onPress={ _ => console.log('You touched me') }
-								style={styles.rowFront}
-								underlayColor={'#AAA'}
-							>
-								<View style={styles.itemWarpper}>
-                  <Image 
-                  style={{height: 50, width: 50}} 
-                  source={require('./img/head.jpg')}/>
-                  <View style={styles.infoWarpper}> 
-                    <Text>I am {data.nickname}</Text>
-                    <Text>{data.created_at}</Text>
-                  </View>
-								</View>
-							</TouchableHighlight>
-						)}
-						renderHiddenItem={ (data, rowMap) => (
-							<View style={styles.rowBack}>
-								<Text>Left</Text>
-                <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]} 
-                onPress={ _ => this.closeRow(rowMap, data.item.key) }>
-									<Text style={styles.backTextWhite}>关闭</Text>
-								</TouchableOpacity>
-                <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} 
-                onPress={ _ => this.deleteRow(rowMap, data.item.key) }>
-									<Text style={styles.backTextWhite}>删除</Text>
-								</TouchableOpacity>
-							</View>
-						)}
-						leftOpenValue={75}
-						rightOpenValue={-150}
-						onRowDidOpen={this.onRowDidOpen}
-					/> */}
-					<ScrollView>
-						<View>
-							{
-								this.state.test.map((u, i) => {
-									return(
-									<Card key={i} title="你的名字">
-										<View style={styles.user}>
-											<View style={{justifyContent: 'center', flexDirection: 'row'}}>
-											<Image
-													style={{height: 140, width: 160}}
-													resizeMode="cover"
-													source={{ uri: u.avatar }}
-												/>
-											</View>
-											<Text style={styles.name}>{u.name}</Text>
+			<TitleBar title="注册成员" navigation={this.props.navigation}></TitleBar>
+				<ScrollView>
+					<View>
+						{
+							this.state.listViewData.map((u, i) => {
+								return(
+									<TouchableOpacity key={i} 
+									onPress={() => {
+										console.log("111");
+										console.log(i);
+										this.showMsg(i);
+									}}>
+										
+									
+								<Card  title={u.nickname} >
+									<View style={styles.user}>
+										<View style={{justifyContent: 'center', flexDirection: 'row'}}>
+										<Image
+											style={{height: 140, width: 160}}
+											resizeMode="cover"
+											source={{uri: BASE_URL + "/" + u.pic}}
+											/>
 										</View>
-								</Card>
-									)
-								})
-							}
-						</View>
+										<View style={styles.userInfoWarpper}>
+										<Text style={styles.name}>角色： {u.role.alias}</Text>
+										<Text style={styles.name}>授权时间： {u.time.date[0]}  至  {u.time.date[1]}</Text>
+										
+										<Text style={styles.name}>授权星期：
+										{u.time.week[0]=='1'?' 周一':''}
+										{u.time.week[1]=='1'?' 周一':''}
+										{u.time.week[2]=='1'?' 周一':''}
+										{u.time.week[3]=='1'?' 周一':''}
+										{u.time.week[4]=='1'?' 周一':''}
+										{u.time.week[5]=='1'?' 周一':''}
+										{u.time.week[6]=='1'?' 周一':''}
+										{u.time.week[7]=='1'?' 周一':''}
 
-					</ScrollView>
+										{u.time.week[0]=='2'?' 周二':''}
+										{u.time.week[1]=='2'?' 周二':''}
+										{u.time.week[2]=='2'?' 周二':''}
+										{u.time.week[3]=='2'?' 周二':''}
+										{u.time.week[4]=='2'?' 周二':''}
+										{u.time.week[5]=='2'?' 周二':''}
+										{u.time.week[6]=='2'?' 周二':''}
+										{u.time.week[7]=='2'?' 周二':''}
+
+										{u.time.week[0]=='3'?' 周三':''}
+										{u.time.week[1]=='3'?' 周三':''}
+										{u.time.week[2]=='3'?' 周三':''}
+										{u.time.week[3]=='3'?' 周三':''}
+										{u.time.week[4]=='3'?' 周三':''}
+										{u.time.week[5]=='3'?' 周三':''}
+										{u.time.week[6]=='3'?' 周三':''}
+										{u.time.week[7]=='3'?' 周三':''}
+
+										{u.time.week[0]=='4'?' 周四':''}
+										{u.time.week[1]=='4'?' 周四':''}
+										{u.time.week[2]=='4'?' 周四':''}
+										{u.time.week[3]=='4'?' 周四':''}
+										{u.time.week[4]=='4'?' 周四':''}
+										{u.time.week[5]=='4'?' 周四':''}
+										{u.time.week[6]=='4'?' 周四':''}
+										{u.time.week[7]=='4'?' 周四':''}		
+										
+										{u.time.week[0]=='5'?' 周五':''}
+										{u.time.week[1]=='5'?' 周五':''}
+										{u.time.week[2]=='5'?' 周五':''}
+										{u.time.week[3]=='5'?' 周五':''}
+										{u.time.week[4]=='5'?' 周五':''}
+										{u.time.week[5]=='5'?' 周五':''}
+										{u.time.week[6]=='5'?' 周五':''}
+										{u.time.week[7]=='5'?' 周五':''}
+										
+										{u.time.week[0]=='6'?' 周六':''}
+										{u.time.week[1]=='6'?' 周六':''}
+										{u.time.week[2]=='6'?' 周六':''}
+										{u.time.week[3]=='6'?' 周六':''}
+										{u.time.week[4]=='6'?' 周六':''}
+										{u.time.week[5]=='6'?' 周六':''}
+										{u.time.week[6]=='6'?' 周六':''}
+										{u.time.week[7]=='6'?' 周六':''}	
+																				
+										{u.time.week[0]=='7'?' 周日':''}
+										{u.time.week[1]=='7'?' 周日':''}
+										{u.time.week[2]=='7'?' 周日':''}
+										{u.time.week[3]=='7'?' 周日':''}
+										{u.time.week[4]=='7'?' 周日':''}
+										{u.time.week[5]=='7'?' 周日':''}
+										{u.time.week[6]=='7'?' 周日':''}
+										{u.time.week[7]=='7'?' 周日':''}
+										</Text>											
+										</View>
+										
+									</View>
+							</Card>
+							</TouchableOpacity>
+								)
+							})
+						}
+					</View>
+					<PopupDialog
+						ref={(popupDialog) => {
+							this.scaleAnimationDialog = popupDialog;
+						}}
+						height={0.5}						
+						dialogAnimation={scaleAnimation}
+						dialogTitle={<DialogTitle title="修改已登记人员信息" />}
+						actions={[
+							<View style={styles.dia_btn_warpper}
+							key="view-1"> 
+							<DialogButton
+							text="确认" 
+							buttonStyle={styles.dia_btn}                              
+							onPress={() => {
+								this.scaleAnimationDialog.dismiss();
+							}}
+							key="button-1"
+							/>
+							<DialogButton
+							text="关闭" 
+							buttonStyle={styles.dia_btn}             
+							onPress={() => {
+								this.scaleAnimationDialog.dismiss();
+							}}
+							key="button-2"
+							/>
+							</View>
+						]}
+						>
+						<View style={{flex: 1}}>
+							<View style={styles.person_warpper}>
+								<Image 
+								style={styles.person_img}
+								source={require('./img/png.png')}/>
+							</View>
+							<Accordion
+							sections={SECTIONS}
+							renderHeader={this._renderHeader}
+							renderContent={this._renderConfirmTime}
+							underlayColor='#fff'
+							onChange={(index) => {
+								index = false;
+							}}
+
+							/>
+							
+							{/* <WebView
+								source={{uri: 'http://118.24.0.78:8082/index.html'}}
+								style={{marginTop: 20}}
+							/> */}
+							
+						</View>
+						</PopupDialog>
+				</ScrollView>
 			</View>
 		);
+	}
+
+	_renderHeader() {
+		return(
+			<View style={styles.input_warpper}>
+				<Text style={styles.input_lable}>授权时间</Text>
+			</View>
+		)
+	}
+	_renderConfirmTime() {
+		return(
+			<View style={styles.input_warpper}>
+				<Text style={styles.input_lable}>授权星期</Text>
+			</View>
+		)
 	}
 }
 
@@ -214,73 +352,41 @@ const styles = StyleSheet.create({
   infoWarpper: {
     marginLeft: 20
   },
-	standalone: {
-		marginTop: 30,
-		marginBottom: 30,
-	},
-	standaloneRowFront: {
-		alignItems: 'center',
-		backgroundColor: '#CCC',
-		justifyContent: 'center',
-		height: 60,
-	},
-	standaloneRowBack: {
-		alignItems: 'center',
-		backgroundColor: '#8BC645',
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		padding: 15
-	},
-	backTextWhite: {
-		color: '#FFF'
-	},
-	rowFront: {
-		alignItems: 'center',
-		backgroundColor: 'white',
-		borderBottomColor: 'black',
-		borderBottomWidth: 1,
-		justifyContent: 'center',
-		height: 60,
-	},
-	rowBack: {
-		alignItems: 'center',
-		backgroundColor: '#DDD',
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingLeft: 15,
-	},
-	backRightBtn: {
-		alignItems: 'center',
-		bottom: 0,
-		justifyContent: 'center',
-		position: 'absolute',
-		top: 0,
-		width: 75
-	},
-	backRightBtnLeft: {
-		backgroundColor: 'blue',
-		right: 75
-	},
-	backRightBtnRight: {
-		backgroundColor: 'red',
-		right: 0
-	},
-	controls: {
-		alignItems: 'center',
-		marginBottom: 30
-	},
-	switchContainer: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		marginBottom: 5
-	},
-	switch: {
-		alignItems: 'center',
-		borderWidth: 1,
-		borderColor: 'black',
-		paddingVertical: 10,
-		width: Dimensions.get('window').width / 4,
-	}
+  userInfoWarpper: {
+	  marginLeft: 20,
+	  marginTop: 10
+  },
+  dia_btn_warpper: {
+    flexDirection: 'row',
+  },
+  dia_btn:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
+    
+  } ,  
+  person_warpper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  person_img: {
+    // flex: 1,    
+    width: 120,
+    height: 100,
+    
+  },
+   input_warpper: {
+    flexDirection: 'row',
+    
+  },
+  input_lable: {
+    flex: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    fontSize: 20,
+    justifyContent: 'center',
+    textAlign:'center',
+  },
 });
