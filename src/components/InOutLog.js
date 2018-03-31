@@ -64,7 +64,7 @@ export default class InOutLog extends Component {
     // this.
   }
   state = {
-    days: [false, false, false, false, false, false, false, false],
+    days: [true, true, true, true, true, true, true, true],
     user_id: '',
     list: [],
     token: '',

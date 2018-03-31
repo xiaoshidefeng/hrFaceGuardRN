@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  WebView
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import TitleBar from './TitleBar';
@@ -43,7 +44,9 @@ export default class ConfirmCode extends Component {
     });
     JPushModule.addReceiveNotificationListener((message) => {
       console.log("receive notification: " + message);
-      this.showScaleAnimationDialog();
+      this.popupDialog.show(() => {
+        console.log('callback - will be called immediately')
+      });
     })
   }
   componentWillUnmount() {
@@ -122,10 +125,11 @@ export default class ConfirmCode extends Component {
         
         </View>
 
-        <PopupDialog
+        {/* <PopupDialog
           ref={(popupDialog) => {
             this.scaleAnimationDialog = popupDialog;
           }}
+          height={0.5}						          
           dialogAnimation={scaleAnimation}
           dialogTitle={<DialogTitle title="查看来访人员信息" />}
           actions={[
@@ -154,8 +158,51 @@ export default class ConfirmCode extends Component {
             <Image 
               style={styles.person_img}
               source={{uri: this.state.imgurl}}/>
+              <WebView
+								source={{uri: 'https://www.github.com'}}
+								style={{marginTop: 20}}
+							/>
           </View>
-        </PopupDialog>
+        </PopupDialog> */}
+
+
+        <PopupDialog
+						ref={(popupDialog) => {
+							this.scaleAnimationDialog = popupDialog;
+						}}
+						height={0.5}						
+						dialogAnimation={scaleAnimation}
+						dialogTitle={<DialogTitle title='查看视频' />}
+						actions={[
+							<View style={styles.dia_btn_warpper}
+							key="view-2"> 
+							<DialogButton
+							text="确认" 
+							buttonStyle={styles.dia_btn}                              
+							onPress={() => {
+								this.scaleAnimationDialog.dismiss();
+							}}
+							key="button-3"
+							/>
+							<DialogButton
+							text="关闭" 
+							buttonStyle={styles.dia_btn}             
+							onPress={() => {
+								this.scaleAnimationDialog.dismiss();
+							}}
+							key="button-4"
+							/>
+							</View>
+						]}
+						>
+						<View style={{flex: 1}}>
+							<WebView
+								source={{uri: 'https://www.github.com'}}
+								// style={{marginTop: 20}}
+							/>
+							
+						</View>
+						</PopupDialog>
       </View>  
        
     );
