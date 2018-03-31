@@ -29,19 +29,22 @@ export default class ConfirmCode extends Component {
   state =  {
     imgurl: "./img/head.jpg",
     dialogShow: false,
-    
+    pushMsg: ''
   }
 
   // example
   componentDidMount() {
-    JPushModule.notifyJSDidLoad();
+    JPushModule.notifyJSDidLoad((resultCode) => {
+      // do something
+      console.log("receive notifyJSDidLoad: " + resultCode);
+    });
     JPushModule.addReceiveCustomMsgListener((message) => {
       this.setState({pushMsg: message});
     });
     JPushModule.addReceiveNotificationListener((message) => {
       console.log("receive notification: " + message);
+      this.showScaleAnimationDialog();
     })
-
   }
   componentWillUnmount() {
     JPushModule.removeReceiveCustomMsgListener();
