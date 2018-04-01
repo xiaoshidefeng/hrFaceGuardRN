@@ -6,21 +6,18 @@ import {
     View,
     TextInput,
     StatusBar,
-    TouchableHighlight,
-    AsyncStorage,
     Image,
     TouchableWithoutFeedback
 } from 'react-native';
 import MainPage from './MainPage';
-import { StackNavigator,
-         NavigationActions } from 'react-navigation';
-import { Sae } from 'react-native-textinput-effects';
+import {
+    NavigationActions
+} from 'react-navigation';
+import {Sae} from 'react-native-textinput-effects';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {Button} from 'react-native-elements';
-import { LOGIN_BY_PASSWORD, GET_USER_BY_ID } from './commons/Api';
-import Storage from 'react-native-storage';
+import {LOGIN_BY_PASSWORD, GET_USER_BY_ID} from './commons/Api';
 import Toast, {DURATION} from 'react-native-easy-toast';
-import QrScanView from './components/QrScanView';
 
 
 export default class Login extends Component {
@@ -34,7 +31,7 @@ export default class Login extends Component {
     };
 
     state = {
-        logining:false,
+        logining: false,
     }
 
     componentWillMount() {
@@ -44,53 +41,52 @@ export default class Login extends Component {
     render() {
         const {logining} = this.state;
         return (
-        <View style={styles.container}>
-            <StatusBar backgroundColor={'#008B8B'} />
-            <TouchableWithoutFeedback onPress={() => this.toTakePhoto()} >
-                <View style={styles.img_facewarpper}>
-                    <Image style={styles.img_face}
-                        source={require('./components/img/face.png')} />
-                </View>
-            </TouchableWithoutFeedback>
-            <View style={styles.warpper}>
-                <Sae
-                    label={'账 号'}
-                    iconClass={FontAwesomeIcon}
-                    iconName={'pencil'}
-                    iconColor={'white'}
-                    // TextInput props
-                    autoCapitalize={'none'}
-                    autoCorrect={false}
-                    labelStyle={{ color: '#ffffff' }}
-                />
-                <Sae
-                    label={'密 码'}
-                    iconClass={FontAwesomeIcon}
-                    iconName={'pencil'}
-                    iconColor={'white'}
-                    // TextInput props
-                    autoCapitalize={'none'}
-                    autoCorrect={false}
-                    labelStyle={{ color: '#ffffff' }}
-                    secureTextEntry={true} 
-                />
-                <View style={{height:50}}></View>
+            <View style={styles.container}>
+                <StatusBar backgroundColor={'#008B8B'}/>
+                <TouchableWithoutFeedback onPress={() => this.toTakePhoto()}>
+                    <View style={styles.img_facewarpper}>
+                        <Image style={styles.img_face}
+                               source={require('./components/img/face.png')}/>
+                    </View>
+                </TouchableWithoutFeedback>
+                <View style={styles.warpper}>
+                    <Sae
+                        label={'账 号'}
+                        iconClass={FontAwesomeIcon}
+                        iconName={'pencil'}
+                        iconColor={'white'}
+                        // TextInput props
+                        autoCapitalize={'none'}
+                        autoCorrect={false}
+                        labelStyle={{color: '#ffffff'}}
+                    />
+                    <Sae
+                        label={'密 码'}
+                        iconClass={FontAwesomeIcon}
+                        iconName={'pencil'}
+                        iconColor={'white'}
+                        // TextInput props
+                        autoCapitalize={'none'}
+                        autoCorrect={false}
+                        labelStyle={{color: '#ffffff'}}
+                        secureTextEntry={true}
+                    />
+                    <View style={{height: 50}}></View>
 
-                <Button
-                    title='登 录'
-                    style={styles.loginBtn}
-                    borderRadius={10}
-                    fontSize={18}
-                    loading={logining}
-                    onPress={() => this.loginInMainpage()} />  
+                    <Button
+                        title='登 录'
+                        style={styles.loginBtn}
+                        borderRadius={10}
+                        fontSize={18}
+                        loading={logining}
+                        onPress={() => this.loginInMainpage()}/>
+                </View>
+                <Toast ref="toast"/>
             </View>
-            <Toast ref="toast"/>
-        </View>
-    )
+        )
     }
 
     toTakePhoto() {
-        console.log('toTake');
         this.props.navigation.navigate('TakePhoto');
     }
 
@@ -99,43 +95,33 @@ export default class Login extends Component {
             index: 0,
             actions: [NavigationActions.navigate({routeName: 'MainPage'})]
         });
-        console.log('123');                
         this.props.navigation.dispatch(resetActions);
     }
 
     fetchLogin = () => {
-        // const { id } = this.props.navigation.state.params;
-        // const { offset, comments, hotComments } = this.state;
-        let formData = new FormData();  
-        formData.append("email","test@qq.com");
-        formData.append("password","123456");        
+        let formData = new FormData();
+        formData.append("email", "test@qq.com");
+        formData.append("password", "123456");
         this.setState({logining: true});
-        
+
         (async () => {
             try {
-                console.log(LOGIN_BY_PASSWORD);                
-                
+
                 const resC = await fetch(LOGIN_BY_PASSWORD, {
                     method: 'POST',
-                    // headers: {
-                    //     'Accept': 'application/json',
-                    //     'Content-Type': 'application/json',
-                    // },
                     body: formData
                 });
-                
+
                 const data = await resC.json();
-                console.log(data.token);
                 storage.save({
                     key: 'user',  // 注意:请不要在key中使用_下划线符号!
-                    data: { 
-                      token: data.token
+                    data: {
+                        token: data.token
                     },
                     expires: 1000 * 3600
-                });       
-                // this.toLoad();
+                });
                 this.gotoMainPage();
-                
+
                 return true;
 
             } catch (err) {
@@ -152,27 +138,27 @@ export default class Login extends Component {
         // // 读取
         storage.load({
             key: 'user',
-            
+
             // autoSync(默认为true)意味着在没有找到数据或数据过期时自动调用相应的sync方法
             autoSync: true,
-            
+
             // syncInBackground(默认为true)意味着如果数据过期，
             // 在调用sync方法的同时先返回已经过期的数据。
             // 设置为false的话，则始终强制返回sync方法提供的最新数据(当然会需要更多等待时间)。
             syncInBackground: true,
-            
+
             // 你还可以给sync方法传递额外的参数
             syncParams: {
-              extraFetchOptions: {
-                // 各种参数
-              },
-              someFlag: true,
+                extraFetchOptions: {
+                    // 各种参数
+                },
+                someFlag: true,
             },
-          }).then(ret => {
-        
+        }).then(ret => {
+
             this.gotoMainPage();
 
-          }).catch(err => {
+        }).catch(err => {
             console.warn(err.message);
             switch (err.name) {
                 case 'NotFoundError':
@@ -182,7 +168,7 @@ export default class Login extends Component {
                     // TODO
                     break;
             }
-          })
+        })
     }
 
 
@@ -190,12 +176,7 @@ export default class Login extends Component {
      * 登录进入主页面
      */
     loginInMainpage() {
-        // resetActions = NavigationActions.reset({
-        //     index: 0,
-        //     actions: [NavigationActions.navigate({routeName: 'MainPage'})]
-        // });
-        // console.log('123');                
-        // this.props.navigation.dispatch(resetActions);
+        // this.gotoMainPage();
         // 这里开始验证
         this.fetchLogin();
     }
@@ -228,7 +209,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
         flexDirection: 'column',
-        
+
     },
     item: {
         flexDirection: 'row',
@@ -250,10 +231,3 @@ const styles = StyleSheet.create({
     }
 
 })
-// const loginStack = StackNavigator({
-//     Login: { screen: Login },
-//     MainPage: {screen: MainPage},
-//     QrScanView: {screen: QrScanView}
-//   });
-  
-// AppRegistry.registerComponent('loginStack', () => App);

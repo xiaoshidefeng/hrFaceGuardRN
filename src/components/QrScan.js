@@ -33,27 +33,23 @@ export default class CoverView extends Component {
         scanBarHeight: 1.5,
         scanBarMargin: 6,
         hintText: '将二维码/条码放入框内，即可自动扫描',
-        hintTextStyle: {color: '#fff', fontSize: 14,backgroundColor:'transparent'},
+        hintTextStyle: {color: '#fff', fontSize: 14, backgroundColor: 'transparent'},
         hintTextPosition: 130,
-        isShowScanBar:true
+        isShowScanBar: true
     }
 
     constructor(props) {
         super(props);
-
-        // this.getBackgroundColor = this.getBackgroundColor.bind(this);
-        // this.getRectSize = this.getRectSize.bind(this);
-        // this.getCornerSize = this.getCornerSize.bind(this);
-        // this.renderLoadingIndicator = this.renderLoadingIndicator.bind(this);
 
         this.state = {
             topWidth: 0,
             topHeight: 0,
             leftWidth: 0,
             animatedValue: new Animated.Value(0),
-            isClosed : false
+            isClosed: false
         }
     }
+
     //获取背景颜色
     getBackgroundColor() {
         return ({
@@ -200,9 +196,9 @@ export default class CoverView extends Component {
 
     //绘制扫描线
     _renderScanBar() {
-      if(!this.props.isShowScanBar) return;
+        if (!this.props.isShowScanBar) return;
         if (this.props.scanBarImage) {
-            return <Image style={ {resizeMode: 'contain', width: this.getScanImageWidth()}}
+            return <Image style={{resizeMode: 'contain', width: this.getScanImageWidth()}}
                           source={this.props.scanBarImage}/>
         } else {
             return <View style={[this.getScanBarMargin(), {
@@ -222,7 +218,7 @@ export default class CoverView extends Component {
 
         return (
             <View onLayout={({nativeEvent: e}) => this.measureTotalSize(e)}
-                    style={[styles.container, this.getBottomMenuHeight()]}>
+                  style={[styles.container, this.getBottomMenuHeight()]}>
                 <View style={[styles.viewfinder, this.getRectSize()]}
                       onLayout={({nativeEvent: e}) => this.measureRectPosition(e)}
                 >
@@ -340,10 +336,10 @@ export default class CoverView extends Component {
     componentWillUnmount() {
         this.setState({isClosed: true});
     }
-    
+
     scannerLineMove() {
         if (this.isClosed) {
-            return ;
+            return;
         }
         this.state.animatedValue.setValue(0);  //重置Rotate动画值为0
         Animated.timing(this.state.animatedValue, {
@@ -414,14 +410,14 @@ const styles = StyleSheet.create({
     image_camera: {
         height: 30,
         width: 30,
-        position:'absolute',
-        right:16,
-        bottom:16,
+        position: 'absolute',
+        right: 16,
+        bottom: 16,
     },
     image_top_close: {
         height: 28,
         width: 28,
         resizeMode: 'contain',
-        margin:16,
+        margin: 16,
     }
 });

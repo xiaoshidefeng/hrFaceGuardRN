@@ -1,91 +1,65 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Image,
-  AppRegistry,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  TouchableNativeFeedback
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    StatusBar,
+    Image,
+    TouchableNativeFeedback
 } from 'react-native';
-import { StackNavigator,
-  NavigationActions } from 'react-navigation';
 import QrScanView from './QrScanView';
 
 
-
 export default class TitleBar extends Component {
-  constructor(props) {
-    super(props);
-  }
-  toQrScan() {
-    // resetActions = NavigationActions.reset({
-    //     index: 1,
-    //     actions: [NavigationActions.navigate({routeName: 'QrScanView'})]
-    // });
-    // this.props.navigation('Login');
-    console.log('click1');
-    
-    this.props.navigation.navigate('QrScanView'); 
-    // this.props.navigation.navigate('resetActions');
-    console.log('click');
-  }
+    constructor(props) {
+        super(props);
+    }
+
+    toQrScan() {
+        this.props.navigation.navigate('QrScanView');
+    }
 
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor={'#008B8B'} />
-        
-        {/* <View style={styles.qr_warpper}>
-          <Image style={styles.img_style}
-                source={require('./img/block.png')} />
-        </View> */}
-        <View style={styles.text_warpper}>
-        <Text style={{fontSize: 20, color: '#fff', paddingBottom: 10}}>{this.props.title}</Text>
-        </View>
-        <TouchableNativeFeedback  onPress={() => this.toQrScan()}>
-          <View style={styles.qr_warpper}>
-            <Image style={styles.img_style}
-                  source={require('./img/qrscan.png')}
-                  />
-          </View>
-        </TouchableNativeFeedback>
+    render() {
+        return (
+            <View style={styles.container}>
+                <StatusBar backgroundColor={'#008B8B'}/>
 
-      </View>   
-    );
-  }
+                <View style={styles.text_warpper}>
+                    <Text style={{fontSize: 20, color: '#fff', paddingBottom: 10}}>{this.props.title}</Text>
+                </View>
+                <TouchableNativeFeedback onPress={() => this.toQrScan()}>
+                    <View style={styles.qr_warpper}>
+                        <Image style={styles.img_style}
+                               source={require('./img/qrscan.png')}
+                        />
+                    </View>
+                </TouchableNativeFeedback>
+
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#008B8B',
-      height: 45,
-      flexDirection:'row',
-      justifyContent:'center',
+        backgroundColor: '#008B8B',
+        height: 45,
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     text_warpper: {
-      justifyContent: 'center'
+        justifyContent: 'center'
     },
     qr_warpper: {
-      position: 'absolute',
-      top: 5,
-      right: 15
+        position: 'absolute',
+        top: 5,
+        right: 15
     },
     img_style: {
-      width: 25,
-      height: 25,
+        width: 25,
+        height: 25,
     }
 
 })
-
-// const QrStack = StackNavigator({
-//   QrScanView: { screen: QrScanView },
-//   TitleBar: { screen: TitleBar }
-  
-// });
-
-// AppRegistry.registerComponent('QrStack', () => App);
