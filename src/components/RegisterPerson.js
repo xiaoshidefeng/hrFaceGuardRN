@@ -548,11 +548,16 @@ export default class RegisterPerson extends Component {
 			  var uuri = UPDATE_PERMISSION_TIME + this.state.user_id + "/addresses/1";
 			  console.log(uuri);                
 				const resC = await fetch(uuri, {
-					method: 'POST',
+					method: 'PATCH',
 					headers: {
-					  'Authorization': this.state.token,
+						'Authorization': this.state.token,
+						'Content-Type': 'application/json'
 					},
-					body: formData
+					body: JSON.stringify({
+						"user_id": this.state.user_id,
+						"role_id": this.state.role_id,
+						"time": JSON.stringify(JSON.parse(weekFormat))
+					})
 				});
 				
 				const data = await resC.json();

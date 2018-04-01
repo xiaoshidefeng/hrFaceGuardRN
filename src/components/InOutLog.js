@@ -101,13 +101,13 @@ export default class InOutLog extends Component {
     this.setState({isRefreshing: true});
     //refresh to initial data
     this.fetchInOutList();    
-    setTimeout(() => {
-      //refresh to initial data
-      // this.setState({
-      //   data: this.data,
-      //   isRefreshing: false
-      // });
-    }, 2000);
+    // setTimeout(() => {
+    //   //refresh to initial data
+    //   // this.setState({
+    //   //   data: this.data,
+    //   //   isRefreshing: false
+    //   // });
+    // }, 2000);
   }
 
   onEndReached() {
@@ -367,11 +367,15 @@ export default class InOutLog extends Component {
 			  var uuri = UPDATE_PERMISSION_TIME + this.state.user_id + "/addresses/1";
 			  console.log(uuri);                
 				const resC = await fetch(uuri, {
-					method: 'POST',
+					method: 'PATCH',
 					headers: {
-					  'Authorization': this.state.token,
+            'Authorization': this.state.token,
+            'Content-Type': 'application/json'
 					},
-					body: formData
+					body:JSON.stringify({
+            "role_id":this.getRoleId(),
+            "time": JSON.stringify(JSON.parse(times))
+          })
 				});
 				
 				const data = await resC.json();
