@@ -33,23 +33,24 @@ import PopupDialog,
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
-import { ActionSheetCustom as ActionSheet } from 'react-native-custom-actionsheet'
-
-// import {weekData} from './data/WeekData';
+import { ActionSheetCustom as ActionSheet } from 'react-native-custom-actionsheet';
+import { SelectMultipleButton, SelectMultipleGroupButton } from 'react-native-selectmultiple-button'
 
 const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
 const scaleAnimation = new ScaleAnimation();
 
-const SECTIONS = [
-  {
-    title: 'First',
-    content: 'Lorem ipsum...'
-  }
-];
+
+const DEMO_OPTIONS_1 = ['option 1', 'option 2', 
+'option 3', 'option 4', 'option 5', 'option 6', 'option 7', 'option 8', 'option 9'];
+
 const CANCEL_INDEX = 0
 const DESTRUCTIVE_INDEX = 4
 
-
+const themeColor = '#0D1014'
+const ios_blue = '#007AFF'
+const textColor = '#D3D3D3'
+const multipleData = ['running', 'riding', 'reading', 'coding', 'Niuer']
+const radioData = ['家人', '亲戚', '保姆', '暂行']
 
 export default class InOutLog extends Component {
   constructor(props) {
@@ -57,8 +58,6 @@ export default class InOutLog extends Component {
     this.onEndReached = this.onEndReached.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this._renderHeader = this._renderHeader.bind(this);
-    this._showTimeBetween = this._showTimeBetween.bind(this);
     this._renderContent = this._renderContent.bind(this);
     this.data = [];
     // this.
@@ -80,6 +79,8 @@ export default class InOutLog extends Component {
     beginTime: '点击选择开始时间',
     endTime: '点击选择结束时间',
     isShowPeopleDate: false,
+    imageUrl: 'www',
+    radioSelectedData:''
   }
 
   // ActionSheetCustom
@@ -238,14 +239,7 @@ export default class InOutLog extends Component {
     })
   }
 
-  // 日期选择
-  _renderHeader(section) {
-    return (
-      <View >
-        <Text style={styles.time_lable}>授权时间选择</Text>
-      </View>
-    );
-  }
+
 
   _renderContent(section) {
     return (
@@ -280,277 +274,22 @@ export default class InOutLog extends Component {
   }
 
   clickItem(event) {
-    console.log('click item');
     console.log(event);
-    console.log(event.title + "11111111");
 
     this.setState({nick_name: event.title});
     this.setState({role_id: event.role_id});
     this.setState({address_id: event.address_id});
+    this.setState({imageUrl: event.imageUrl});
     this.setState({role_alias: event.role_alias});
     this.setState({user_id: event.user_id});
-    console.log(event.user_id);
+    console.log(event.imageUrl);
     
-    this.getUserTimeInfo(event.user_id, event.address_id);
+    // this.getUserTimeInfo(event.user_id, event.address_id);
     this.showScaleAnimationDialog();
     
   }
 
-  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
 
-  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
-
-  _handleDatePicked = date => {
-    console.log("A date has been picked: ", this.formatDate(date));
-    if (this.state.isBeginTime) {
-      console.log('is begin time');
-      this.setState({beginTime: this.formatDate(date)});
-    } else if (!this.state.isBeginTime) {
-      console.log('is end time');
-      this.setState({endTime: this.formatDate(date)});      
-    }
-    console.log('begin time' + this.state.beginTime + 'end time' + this.state.endTime);
-    this._hideDateTimePicker();
-  };
-
-  formatDate(date) {
-    var y = date.getFullYear();  
-    var m = date.getMonth() + 1;  
-    m = m < 10 ? '0' + m : m;  
-    var d = date.getDate();  
-    d = d < 10 ? ('0' + d) : d;  
-    return y + '-' + m + '-' + d;  
-  }
-
-  _showTimeBetween() {
-      return(
-        <View>
-          <View style={styles.input_warpper}>
-            <Text style={styles.input_lable}>授权开始时间</Text>
-            <TouchableOpacity style={styles.tb_warpper} onPress={() => {
-              this.setState({isBeginTime: true});                
-              this.setState({isDateTimePickerVisible: true});
-            }}>
-              <Text style={styles.time_lable}>{this.state.beginTime}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.input_warpper}>
-            <Text style={styles.input_lable}>授权截止时间</Text>
-            <TouchableOpacity style={styles.tb_warpper}  onPress={() => {
-              this.setState({isBeginTime: false});                                
-              this.setState({isDateTimePickerVisible: true});
-            }}>
-              <Text style={styles.time_lable}>{this.state.endTime}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.input_warpper}>
-            <Text style={styles.input_lable} onPress={() => {
-              this.popupDialog.show(() => {
-                console.log('callback - will be called immediately')
-              });
-            }}>星期选择</Text>
-            
-          </View>
-          
-        </View>
-      )
-  }
-
-  _renderWeekSelect() {
-    return(
-      <View>
-  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>全选</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <CheckBox value={this.state.days[0]}
-        onValueChange={() => {
-          var temp = this.state.days;
-          temp[0] = !temp[0];
-          if (temp[0] == true) {
-            for (var i = 1; i <= 7; i++) {
-              temp[i] = true;
-            }
-          }
-          this.setState({days: temp});
-          console.log(this.state.days[0]);
-        }}/>
-      </View>
-  </View>
-  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期一</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <CheckBox value={this.state.days[1]}
-        onValueChange={() => {
-          var temp = this.state.days;
-          temp[1] = !temp[1];
-          if (temp[1] == false) {
-            temp[0] = false;
-          }
-          this.setState({days: temp});
-          console.log(this.state.days[1]);
-        }}/>
-      </View>
-  </View>
-  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期二</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <CheckBox value={this.state.days[2]}
-        onValueChange={() => {
-          var temp = this.state.days;
-          temp[2] = !temp[2];
-          if (temp[2] == false) {
-            temp[0] = false;
-          }
-          this.setState({days: temp});
-          console.log(this.state.days[2]);
-        }}/>
-      </View>
-  </View>
-  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期三</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <CheckBox value={this.state.days[3]}
-        onValueChange={() => {
-          var temp = this.state.days;
-          temp[3] = !temp[3];
-          if (temp[3] == false) {
-            temp[0] = false;
-          }
-          this.setState({days: temp});
-          console.log(this.state.days[3]);
-        }}/>
-      </View>
-  </View>
-  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期四</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <CheckBox value={this.state.days[4]}
-        onValueChange={() => {
-          var temp = this.state.days;
-          temp[4] = !temp[4];
-          if (temp[4] == false) {
-            temp[0] = false;
-          }
-          this.setState({days: temp});
-          console.log(this.state.days[4]);
-        }}/>
-      </View>
-  </View>
-  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-      <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期五</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <CheckBox value={this.state.days[5]}
-        onValueChange={() => {
-          var temp = this.state.days;
-          temp[5] = !temp[5];
-          if (temp[5] == false) {
-            temp[0] = false;
-          }
-          this.setState({days: temp});
-          console.log(this.state.days[5]);
-        }}/>
-      </View>
-  </View>
-  <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-       <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期六</Text>
-       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-         <CheckBox value={this.state.days[6]}
-         onValueChange={() => {
-           var temp = this.state.days;
-           temp[6] = !temp[6];
-           if (temp[6] == false) {
-            temp[0] = false;
-          }
-           this.setState({days: temp});
-           console.log(this.state.days[6]);
-         }}/>
-       </View>
-   </View>
-   <View style={{flexDirection: 'row', borderWidth: 1, borderColor: 'grey'}}>
-       <Text style={{ flex:1 , fontSize:16, textAlign:'center', paddingTop: 5 }}>星期天</Text>
-       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-         <CheckBox value={this.state.days[7]}
-         onValueChange={() => {
-           var temp = this.state.days;
-           temp[7] = !temp[7];
-           if (temp[7] == false) {
-            temp[0] = false;
-          }
-           this.setState({days: temp});
-           console.log(this.state.days[7]);
-         }}/>
-       </View>
-   </View>
-   </View>
-    )
-  }
-
-  toBindTime() {
-
-    this.toFetchTime();
-  }
-
-  formatWeek() {
-    var week = '{"date": ["';
-    week = week + this.state.beginTime + "\", \"" + this.state.endTime + '"], "week": [';
-    var temp = this.state.days;
-    if (temp[0]) {
-      week = week + "1,2,3,4,5,6,7]}"
-    } else {
-      for (var i = 1; i <= 7 ; i ++) {
-        if (temp[i]) {
-          week = week + i;
-          ++i;
-          for (; i <= 7 ; i ++) {
-            if (temp[i]) {
-              week = week + "," + i;
-            }
-          }
-          break;
-        }
-      }
-      week += "]}";
-    }
-    return week;
-  }
-
-  toFetchTime() {
-    var weekFormat = this.formatWeek();
-    console.log(weekFormat);
-
-    let formData = new FormData();  
-    formData.append("user_id", this.state.user_id);
-    formData.append("role_id", this.state.role_id);
-    formData.append("time", JSON.stringify(JSON.parse(weekFormat)));  
-    formData.append("_method", "PATCH");
-    
-    console.log(JSON.stringify(JSON.parse(weekFormat)));
-    
-    (async () => {
-        try {
-          var uuri = UPDATE_PERMISSION_TIME + this.state.user_id + "/addresses/" + this.state.address_id;
-          console.log(uuri);                
-            const resC = await fetch(uuri, {
-                method: 'POST',
-                headers: {
-                  'Authorization': this.state.token,
-                },
-                body: formData
-            });
-            
-            const data = await resC.json();
-            console.log(data);
-            
-            this.scaleAnimationDialog.dismiss();    
-            
-            return true;
-
-        } catch (err) {
-            console.log(err)
-            this.refs.toast.show('绑定失败');
-        }
-    })();
-  }
 
   // 获取当前点击用户的配置信息
   getUserTimeInfo(us_id, ad_id) {
@@ -598,6 +337,57 @@ export default class InOutLog extends Component {
     })();
   }
 
+
+  // 获取 role id
+  getRoleId() {
+    var role = this.state.radioSelectedData;
+    if (role == '家人') {
+      return 6;
+    } else if (role == '亲戚') {
+      return 7;
+    } else if (role == '保姆') {
+      return 8;
+    } else if (role == '暂行') {
+      return 9;
+    }
+  }
+  // 更新权限
+  
+	toFetchUpdateTime() {
+    var times = '{"date":["2018-03-28","2018-03-30"],"week":[1,2,3,4,5,6,7]}';
+		let formData = new FormData();  
+    formData.append("role_id", this.getRoleId());
+    formData.append("time", JSON.stringify(JSON.parse(times)));
+
+		formData.append("_method", "PATCH");
+		console.log(this.getRoleId());
+		
+		(async () => {
+			try {
+			  var uuri = UPDATE_PERMISSION_TIME + this.state.user_id + "/addresses/1";
+			  console.log(uuri);                
+				const resC = await fetch(uuri, {
+					method: 'POST',
+					headers: {
+					  'Authorization': this.state.token,
+					},
+					body: formData
+				});
+				
+				const data = await resC.json();
+				console.log(data);
+				
+				this.scaleAnimationDialog.dismiss();    
+				
+				return true;
+	
+			} catch (err) {
+				console.log(err)
+				this.refs.toast.show('绑定失败');
+			}
+		})();
+	  }
+
   render() {
     return (
       <View style={styles.cover}>
@@ -631,20 +421,15 @@ export default class InOutLog extends Component {
         />
         <View >
 
-          <DateTimePicker
-            isVisible={this.state.isDateTimePickerVisible}
-            onConfirm={this._handleDatePicked}
-            onCancel={this._hideDateTimePicker}
-          />
         </View>
 
         <PopupDialog
           ref={(popupDialog) => {
             this.scaleAnimationDialog = popupDialog;
           }}
-          height={0.6}
+          height={0.5}
           dialogAnimation={scaleAnimation}
-          dialogTitle={<DialogTitle title="修改人员信息" />}
+          dialogTitle={<DialogTitle title="修改人员权限" />}
           actions={[
             <View style={styles.dia_btn_warpper}
               key="view-1"> 
@@ -652,7 +437,7 @@ export default class InOutLog extends Component {
               text="绑定" 
               buttonStyle={styles.dia_btn}                              
               onPress={() => {
-                this.toBindTime();
+                this.toFetchUpdateTime();
               }}
               key="button-1"
             />
@@ -667,68 +452,18 @@ export default class InOutLog extends Component {
             </View>
           ]}
         >
-          <View style={styles.dialogContentView}>
-            <View style={styles.input_warpper}>
-              <Text style={styles.input_lable}>昵称</Text>
-              <TextInput
-                style={styles.input_style}
-                onChangeText={(text) => this.setState({text})}
-                value={this.state.nick_name}
-              />
-            </View>
-            <Accordion
-              sections={SECTIONS}
-              renderHeader={this._renderHeader}
-              renderContent={this._showTimeBetween}
-              underlayColor='#fff'
-              onChange={(index) => {
-                index = false;
-              }}
+          <View  style={{flex: 1}}>
+              <View style={styles.person_warpper}>
+								<Image 
+								style={styles.person_img}
+								source={{uri: this.state.imageUrl}}/>
+							</View>
 
-            />
+              {this._tabView()}
 
-            
+
           </View>
         </PopupDialog>
-
-
-        
-          <PopupDialog
-            ref={(popupDialog) => { this.popupDialog = popupDialog; }}
-            dialogAnimation={slideAnimation}
-            height={0.55}
-            actions={[ 
-              <View style={styles.dia_btn_warpper}
-                key="view-2"> 
-              <DialogButton
-                text="确定" 
-                buttonStyle={styles.dia_btn}                              
-                onPress={() => {
-                  this.popupDialog.dismiss();
-                }}
-                key="button-3"
-              />
-              <DialogButton
-                text="取消" 
-                buttonStyle={styles.dia_btn}             
-                onPress={() => {
-                  this.popupDialog.dismiss();
-                  var temp = this.state.days;
-                  for (var i = 0; i <= 7; i++) {
-                    temp[i] = false;
-                  }
-                  this.setState({days: temp});
-                }}
-                key="button-4"
-              />
-              </View>
-            ]}
-              >
-            <View>
-              {this._renderWeekSelect()}
-            
-            </View>
-          </PopupDialog>
 
       <Toast ref="toast"/>
       </View>
@@ -736,12 +471,63 @@ export default class InOutLog extends Component {
 
     );
   }
+
+  _tabView() {
+    return(
+      <View>
+        
+        <Text style={{ color: ios_blue, marginLeft: 20 }}>
+          当前角色  {this.state.radioSelectedData}
+        </Text>
+        <View
+          style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center' }}>
+          {
+            radioData.map((gender) =>
+              <SelectMultipleButton
+                key={gender}
+                multiple={false}
+                value={gender}
+                displayValue={gender }
+                selected={this.state.radioSelectedData === gender}
+                singleTap={(valueTap) => this._singleTapRadioSelectedButtons(valueTap, gender)} />
+            )
+          }
+        </View>
+      </View>
+    )
+  }
+  _singleTapRadioSelectedButtons(valueTap, gender) {
+    // Alert.alert('', valueTap)
+    this.setState({
+      radioSelectedData: gender
+    })
+  }
 }
 
 const styles = StyleSheet.create({
   cover: {
     flex: 1,
     backgroundColor:'white'
+  },
+  dropdown_6: {
+    flex: 1,
+    backgroundColor: 'gray'
+  },
+  dropdown_6_image: {
+    width: 40,
+    height: 40,
+  },
+  person_warpper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  person_img: {
+    // flex: 1,    
+    width: 120,
+    height: 100,
+    
   },
   input_warpper: {
     flexDirection: 'row',

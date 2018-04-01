@@ -29,6 +29,7 @@
     "react-native-modal-datetime-picker": "^5.0.0",
     "react-native-modal-dropdown": "^0.6.2",
     "react-native-popup-dialog": "^0.11.46",
+    "react-native-selectmultiple-button": "0.0.85",
     "react-native-storage": "^0.2.2",
     "react-native-swipe-list-view": "^1.0.6",
     "react-native-tab-navigator": "^0.3.4",
