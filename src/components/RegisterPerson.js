@@ -31,6 +31,7 @@ import PopupDialog,
 import Accordion from 'react-native-collapsible/Accordion';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Calendar from 'react-native-calendar-select';
 
 const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
 const scaleAnimation = new ScaleAnimation();
@@ -56,6 +57,8 @@ export default class RegisterPerson extends Component {
 		// this.state = {
 		// 	listViewData: Array(20).fill('').map((_,i) => ({key: `${i}`, text: `item #${i}`})),
 		// };
+		this.confirmDate = this.confirmDate.bind(this);
+		this.openCalendar = this.openCalendar.bind(this);
   }
   
   state = {
@@ -65,11 +68,30 @@ export default class RegisterPerson extends Component {
 		listViewData: [],
 		test : [],
 		itemData: {},
-		beginTime: '',
-		endTime: '',
+		beginTime: '2018-03-29',
+		endTime: '2018-03-30',
 		isDateTimePickerVisible: false,
 		days: [true, true, true, true, true, true, true, true],
-  }
+		startDate: new Date(2018, 3, 29),  
+		endDate: new Date(2018, 3, 31),
+		visibleLoad: false
+	}
+	
+	// 日期区间选择
+	confirmDate({startDate, endDate, startMoment, endMoment}) {
+		console.log(startDate + "***" + endDate + "***" + startMoment + "***" + endMoment);
+		this.setState({beginTime: this.formatDate(startDate)});
+		this.setState({endTime: this.formatDate(endDate)});
+		
+		// this.setState({
+		// 	startDate,
+		// 	endDate
+		// });
+	}
+	openCalendar() {
+		this.calendar && this.calendar.open();
+	}
+
   // 日期选择器控制
 	_showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
 
@@ -99,6 +121,9 @@ export default class RegisterPerson extends Component {
 
 
   componentDidMount() {
+		this.setState({
+			visible: !this.state.visible
+		});
     this.initData();
   }
 
@@ -172,8 +197,9 @@ export default class RegisterPerson extends Component {
           
 		const data = await resC.json();
 		var list = data.data;
-		console.log(data);
-		console.log(list);		
+		this.setState({
+			visible: false
+		});
 		this.setState({listViewData: list});
       } catch (err) {
           console.log(err);
@@ -210,7 +236,22 @@ export default class RegisterPerson extends Component {
   }
 
 	render() {
-
+		let customI18n = {
+			'w': ['', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+			'weekday': ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			'text': {
+				'start': 'Check in',
+				'end': 'Check out',
+				'date': 'Date',
+				'save': 'Confirm',
+				'clear': 'Reset'
+			},
+			'date': 'DD / MM'  // date format
+		};
+		// optional property, too.
+		let color = {
+			subColor: '#f0f0f0'
+		};
 		return (
 			<View style={styles.container}>
 			<TitleBar title="注册成员" navigation={this.props.navigation}></TitleBar>
@@ -315,12 +356,26 @@ export default class RegisterPerson extends Component {
 						}
 					</View>
 					<View >
-
+					<Calendar
+						i18n="en"
+						ref={(calendar) => {this.calendar = calendar;}}
+						customI18n={customI18n}
+						color={color}
+						format="YYYYMMDD"
+						minDate="20180101"
+						maxDate="20190101"
+						startDate={this.state.beginTime}
+						endDate={this.state.endTime}
+						onConfirm={this.confirmDate}
+					/>
 						<DateTimePicker
 						isVisible={this.state.isDateTimePickerVisible}
 						onConfirm={this._handleDatePicked}
 						onCancel={this._hideDateTimePicker}
 						/>
+					</View>
+					<View style={{ flex: 1 }}>
+						<Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
 					</View>
 					<PopupDialog
 						ref={(popupDialog) => {
@@ -443,6 +498,9 @@ export default class RegisterPerson extends Component {
 
 	// 更新用户信息
 	updateUserInfo() {
+		this.setState({
+			visible: true
+		});
 		this.toFetchUpdateTime();
 		this.scaleAnimationDialog.dismiss();
 
@@ -501,7 +559,7 @@ export default class RegisterPerson extends Component {
 				console.log(data);
 				
 				this.scaleAnimationDialog.dismiss();    
-				
+				this.fetchRegisterInfo();
 				return true;
 	
 			} catch (err) {
@@ -515,22 +573,25 @@ export default class RegisterPerson extends Component {
 		return(
 		  <View>
 			<View style={styles.input_warpper}>
-			  <Text style={styles.input_lable}>授权开始时间</Text>
 			  <TouchableOpacity style={styles.tb_warpper} onPress={() => {
-				this.setState({isBeginTime: true});                
-				this.setState({isDateTimePickerVisible: true});
+					this.openCalendar();
+				// this.setState({isBeginTime: true});                
+				// this.setState({isDateTimePickerVisible: true});
 			  }}>
 				<Text style={styles.time_lable}>{this.state.beginTime}</Text>
 			  </TouchableOpacity>
-			</View>
-			<View style={styles.input_warpper}>
-			  <Text style={styles.input_lable}>授权截止时间</Text>
-			  <TouchableOpacity style={styles.tb_warpper}  onPress={() => {
-				this.setState({isBeginTime: false});                                
-				this.setState({isDateTimePickerVisible: true});
+				<Text style={styles.time_lable}>至</Text>
+
+				<TouchableOpacity style={styles.tb_warpper}  onPress={() => {
+					this.openCalendar();					
+				// this.setState({isBeginTime: false});                                
+				// this.setState({isDateTimePickerVisible: true});
 			  }}>
 				<Text style={styles.time_lable}>{this.state.endTime}</Text>
 			  </TouchableOpacity>
+			</View>
+			<View style={styles.input_warpper}>
+
 			</View>
 			<View style={styles.input_warpper}>
 			  <Text style={styles.input_lable} onPress={() => {
