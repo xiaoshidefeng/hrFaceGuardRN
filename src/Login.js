@@ -37,6 +37,10 @@ export default class Login extends Component {
         logining:false,
     }
 
+    componentWillMount() {
+        this.toLoad();
+    }
+
     render() {
         const {logining} = this.state;
         return (
@@ -90,6 +94,15 @@ export default class Login extends Component {
         this.props.navigation.navigate('TakePhoto');
     }
 
+    gotoMainPage() {
+        resetActions = NavigationActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({routeName: 'MainPage'})]
+        });
+        console.log('123');                
+        this.props.navigation.dispatch(resetActions);
+    }
+
     fetchLogin = () => {
         // const { id } = this.props.navigation.state.params;
         // const { offset, comments, hotComments } = this.state;
@@ -121,12 +134,7 @@ export default class Login extends Component {
                     expires: 1000 * 3600
                 });       
                 // this.toLoad();
-                resetActions = NavigationActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'MainPage'})]
-                });
-                console.log('123');                
-                this.props.navigation.dispatch(resetActions);
+                this.gotoMainPage();
                 
                 return true;
 
@@ -162,7 +170,7 @@ export default class Login extends Component {
             },
           }).then(ret => {
         
-            console.log("   data    +++" + ret.token + "   ");
+            this.gotoMainPage();
 
           }).catch(err => {
             console.warn(err.message);

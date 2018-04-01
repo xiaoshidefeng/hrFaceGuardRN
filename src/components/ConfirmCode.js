@@ -11,7 +11,7 @@ import { StackNavigator } from 'react-navigation';
 import TitleBar from './TitleBar';
 import CodeInput from 'react-native-confirmation-code-input';
 import { Button } from 'react-native-elements';
-import {GET_IMG_BY_CODE, BASE_URL} from '../commons/Api';
+import {GET_IMG_BY_CODE, BASE_URL, GATE_CONTROL} from '../commons/Api';
 import PopupDialog, 
 { SlideAnimation,
   ScaleAnimation,  
@@ -44,9 +44,7 @@ export default class ConfirmCode extends Component {
     });
     JPushModule.addReceiveNotificationListener((message) => {
       console.log("receive notification: " + message);
-      this.popupDialog.show(() => {
-        console.log('callback - will be called immediately')
-      });
+      this.showWebViewDialog.show();
     })
   }
   componentWillUnmount() {
@@ -61,6 +59,11 @@ export default class ConfirmCode extends Component {
   showScaleAnimationDialog() {
     this.scaleAnimationDialog.show();
   }
+
+  showWebViewDialog() {
+    this.showWebViewDialog.show();
+  }
+
   checkNumberLegal(isValid) {
     // console.log(isValid);
     this.toFetchImg(isValid);
@@ -87,6 +90,36 @@ export default class ConfirmCode extends Component {
           console.log(err)
           this.setState({logining: false});
           this.refs.toast.show('登录失败 请检查账号密码');
+      }
+  })();
+  }
+
+  toFetchConfirmCode() {
+    
+    let formData = new FormData();  
+    formData.append("type","open");
+    formData.append("building_id","1");        
+    
+    (async () => {
+        try {
+            const resC = await fetch(GATE_CONTROL, {
+                method: 'POST',
+                // headers: {
+                //     'Accept': 'application/json',
+                //     'Content-Type': 'application/json',
+                // },
+                body: formData
+            });
+          const data = await resC.json();
+          this.scaleAnimationDialog.dismiss();
+          this.showWebViewDialog.dismiss();
+          
+          return true;
+
+      } catch (err) {
+          console.log(err)
+          this.setState({logining: false});
+          this.refs.toast.show('授权失败');
       }
   })();
   }
@@ -125,7 +158,7 @@ export default class ConfirmCode extends Component {
         
         </View>
 
-        {/* <PopupDialog
+        <PopupDialog
           ref={(popupDialog) => {
             this.scaleAnimationDialog = popupDialog;
           }}
@@ -139,7 +172,8 @@ export default class ConfirmCode extends Component {
               text="确认" 
               buttonStyle={styles.dia_btn}                              
               onPress={() => {
-                this.scaleAnimationDialog.dismiss();
+                this.toFetchConfirmCode();
+                
               }}
               key="button-1"
             />
@@ -158,17 +192,13 @@ export default class ConfirmCode extends Component {
             <Image 
               style={styles.person_img}
               source={{uri: this.state.imgurl}}/>
-              <WebView
-								source={{uri: 'https://www.github.com'}}
-								style={{marginTop: 20}}
-							/>
           </View>
-        </PopupDialog> */}
+        </PopupDialog>
 
 
         <PopupDialog
 						ref={(popupDialog) => {
-							this.scaleAnimationDialog = popupDialog;
+              this.showWebViewDialog = popupDialog;
 						}}
 						height={0.5}						
 						dialogAnimation={scaleAnimation}
@@ -180,7 +210,7 @@ export default class ConfirmCode extends Component {
 							text="确认" 
 							buttonStyle={styles.dia_btn}                              
 							onPress={() => {
-								this.scaleAnimationDialog.dismiss();
+                this.toFetchConfirmCode();            
 							}}
 							key="button-3"
 							/>
@@ -188,7 +218,7 @@ export default class ConfirmCode extends Component {
 							text="关闭" 
 							buttonStyle={styles.dia_btn}             
 							onPress={() => {
-								this.scaleAnimationDialog.dismiss();
+								this.showWebViewDialog.dismiss();
 							}}
 							key="button-4"
 							/>

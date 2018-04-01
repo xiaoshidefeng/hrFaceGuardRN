@@ -108,3 +108,10 @@ export const GET_USER_IN_OUT_LOG = BASE_URL + '/users/';
  */
 export const GET_IMG_BY_CODE = BASE_URL + '/user_code_pic/';
 
+/**
+ * 门禁开关
+ * method: POST
+ * /switch_auth
+ */
+export const GATE_CONTROL = BASE_URL + '/switch_auth/';
+
