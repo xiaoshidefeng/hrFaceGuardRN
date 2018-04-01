@@ -38,7 +38,7 @@ export default class MainPage extends Component {
     state = {
         selectedTab: 'ConfirmCode',
         userid: 1,
-
+        msgNum: 3
     };
     static  navigationOptions = {
         header: null
@@ -99,11 +99,15 @@ export default class MainPage extends Component {
                 <TabNavigator.Item
                     selected={this.state.selectedTab === 'InOutLog'}
                     title="进出情况"
-                    badgeText="2"
+                    badgeText={this.state.msgNum == '0'?null: this.state.msgNum}
                     selectedTitleStyle={{color: TAB_SELECT_COLOR}}
                     renderIcon={() => <Icon name="eye" size={px2dp(22)} color="#666"/>}
                     renderSelectedIcon={() => <Icon name="eye" size={px2dp(22)} color="#3496f0"/>}
-                    onPress={() => this.setState({selectedTab: 'InOutLog'})}>
+                    onPress={() => {
+                        this.setState({selectedTab: 'InOutLog'});
+                        this.setState({msgNum: '0'});
+                    }
+                    }>
                     <InOutLog navigation={this.props.navigation}/>
                 </TabNavigator.Item>
                 <TabNavigator.Item

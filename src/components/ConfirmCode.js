@@ -47,12 +47,6 @@ export default class ConfirmCode extends Component {
         });
         JPushModule.addReceiveNotificationListener((message) => {
             console.log("receive notification: " + message);
-            // resetActions = NavigationActions.reset({
-            //     index: 0,
-            //     actions: [NavigationActions.navigate({routeName: 'MainPage'})]
-            // });
-            // console.log('123');
-            // this.props.navigation.dispatch(resetActions);
             this.showWebViewDialog.show();
         })
     }
@@ -236,7 +230,6 @@ export default class ConfirmCode extends Component {
                     <View style={{flex: 1}}>
                         <WebView
                             source={{uri: 'http://10.30.90.12:8082'}}
-                            // style={{marginTop: 20}}
                         />
 
                     </View>

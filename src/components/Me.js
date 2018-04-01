@@ -7,17 +7,14 @@ import {
     View,
     TouchableWithoutFeedback
 } from 'react-native';
-import {
-    StackNavigator,
-    NavigationActions
-} from 'react-navigation';
 import {List, ListItem} from 'react-native-elements';
 import TitleBar from './TitleBar';
+import SettingsList from 'react-native-settings-list';
 
 const list = [
     {
         name: 'Amy Farha',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+        avatar_url: './head.jpg',
         subtitle: 'Vice President'
     },
     {
@@ -69,34 +66,77 @@ class Head extends Component {
         )
     }
 }
-
-class SetList extends Component {
-    render() {
-        return (
-            <View style={{marginTop: 10}}>
-                <List containerStyle={{marginTop: 5}}>
-                    {
-                        list.map((l, i) => (
-                            <ListItem
-                                roundAvatar
-                                avatar={{uri: l.avatar_url}}
-                                key={i}
-                                title={l.name}
-                                subtitle={
-                                    <View>
-                                        {/* <Image source={require('../images/rating.png')} style={styles.ratingImage}/> */}
-                                        <Text>5 months ago</Text>
-                                    </View>
-                                }
-                            />
-                        ))
-                    }
-                </List>
-            </View>
-
-        )
-    }
-}
+//
+// class SetList extends Component {
+//     render() {
+//         var bgColor = '#DCE3F4';
+//         return (
+//             <View style={{backgroundColor:'#EFEFF4',flex:1}}>
+//                 <View style={{borderBottomWidth:1, backgroundColor:'#f7f7f8',borderColor:'#c8c7cc'}}>
+//                     <Text style={{alignSelf:'center',marginTop:30,marginBottom:10,fontWeight:'bold',fontSize:16}}>Settings</Text>
+//                 </View>
+//                 <View style={{backgroundColor:'#EFEFF4',flex:1}}>
+//                     <SettingsList borderColor='#c8c7cc' defaultItemSize={50}>
+//                         <SettingsList.Header headerStyle={{marginTop:15}}/>
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/wifi.png')}/>}
+//                             title='Wi-Fi'
+//                             titleInfo='Bill Wi The Science Fi'
+//                             titleInfoStyle={styles.titleInfoStyle}
+//                             onPress={() => Alert.alert('Route to Wifi Page')}
+//                         />
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/blutooth.png')}/>}
+//                             title='Blutooth'
+//                             titleInfo='Off'
+//                             titleInfoStyle={styles.titleInfoStyle}
+//                             onPress={() => Alert.alert('Route to Blutooth Page')}
+//                         />
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/cellular.png')}/>}
+//                             title='Cellular'
+//                             onPress={() => Alert.alert('Route To Cellular Page')}
+//                         />
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/hotspot.png')}/>}
+//                             title='Personal Hotspot'
+//                             titleInfo='Off'
+//                             titleInfoStyle={styles.titleInfoStyle}
+//                             onPress={() => Alert.alert('Route To Hotspot Page')}
+//                         />
+//                         <SettingsList.Header headerStyle={{marginTop:15}}/>
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/notifications.png')}/>}
+//                             title='Notifications'
+//                             onPress={() => Alert.alert('Route To Notifications Page')}
+//                         />
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/control.png')}/>}
+//                             title='Control Center'
+//                             onPress={() => Alert.alert('Route To Control Center Page')}
+//                         />
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/dnd.png')}/>}
+//                             title='Do Not Disturb'
+//                             onPress={() => Alert.alert('Route To Do Not Disturb Page')}
+//                         />
+//                         <SettingsList.Header headerStyle={{marginTop:15}}/>
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/general.png')}/>}
+//                             title='General'
+//                             onPress={() => Alert.alert('Route To General Page')}
+//                         />
+//                         <SettingsList.Item
+//                             icon={<Image style={styles.imageStyle} source={require('./images/display.png')}/>}
+//                             title='Display & Brightness'
+//                             onPress={() => Alert.alert('Route To Display Page')}
+//                         />
+//                     </SettingsList>
+//                 </View>
+//             </View>
+//         )
+//     }
+// }
 
 
 export default class Me extends Component {
@@ -107,11 +147,33 @@ export default class Me extends Component {
     };
 
     render() {
+        var bgColor = '#DCE3F4';
         return (
             <View>
                 <TitleBar title="我" navigation={this.props.navigation}></TitleBar>
                 <Head></Head>
-                <SetList></SetList>
+                {/*<SetList></SetList>*/}
+
+                {/*<View style={{backgroundColor:'#EFEFF4',flex:1}}>*/}
+                    {/*<View style={{backgroundColor:'#EFEFF4',flex:1}}>*/}
+                        {/*<SettingsList borderColor='#c8c7cc' defaultItemSize={50}>*/}
+                            {/*<SettingsList.Header headerStyle={{marginTop:15}}/>*/}
+                            {/*<SettingsList.Item*/}
+                                {/*// icon={<Image style={ProfilePageStyle.imageStyle} source={require('./images/wifi.png')}/>}*/}
+                                {/*title='Wi-Fi'*/}
+                                {/*titleInfo='Bill Wi The Science Fi'*/}
+                                {/*titleInfoStyle={ProfilePageStyle.titleInfoStyle}*/}
+                            {/*/>*/}
+                            {/*<SettingsList.Item*/}
+                                {/*// icon={<Image style={ProfilePageStyle.imageStyle} source={require('./images/blutooth.png')}/>}*/}
+                                {/*title='Blutooth'*/}
+                                {/*titleInfo='Off'*/}
+                                {/*titleInfoStyle={ProfilePageStyle.titleInfoStyle}*/}
+                            {/*/>*/}
+                        {/*</SettingsList>*/}
+                    {/*</View>*/}
+                {/*</View>*/}
+                )
             </View>
 
         );
@@ -157,8 +219,8 @@ const ProfilePageStyle = StyleSheet.create({
     },
     img_avatar: {
         borderRadius: 80,
-        height: 80,
-        width: 80,
+        height: 120,
+        width: 120,
         marginBottom: 16,
     },
     tv_favority: {
@@ -184,4 +246,15 @@ const ProfilePageStyle = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center'
     },
+    imageStyle:{
+        marginLeft:15,
+        alignSelf:'center',
+        height:30,
+        width:30
+    },
+    titleInfoStyle:{
+        fontSize:16,
+        color: '#8e8e93'
+    }
+
 })

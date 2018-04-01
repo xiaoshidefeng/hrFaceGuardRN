@@ -388,7 +388,7 @@ export default class RegisterPerson extends Component {
 								style={styles.person_img}
 								source={{uri: BASE_URL + '/' + this.state.itemData.pic}}/>
 							</View> */}
-                            <Accordion
+                            {/* <Accordion
                                 sections={SECTIONS}
                                 renderHeader={this._renderHeader.bind(this)}
                                 renderContent={this._showTimeBetween.bind(this)}
@@ -397,7 +397,9 @@ export default class RegisterPerson extends Component {
                                     index = false;
                                 }}
 
-                            />
+                            /> */}
+                            {this._renderHeader()}
+                            {this._showTimeBetween()}
                             {/*
 							<WebView
 								source={{uri: 'https://github.com/'}}
