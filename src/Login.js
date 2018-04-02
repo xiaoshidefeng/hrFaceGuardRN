@@ -35,7 +35,7 @@ export default class Login extends Component {
     }
 
     componentWillMount() {
-        this.toLoad();
+        // this.toLoad();
     }
 
     render() {

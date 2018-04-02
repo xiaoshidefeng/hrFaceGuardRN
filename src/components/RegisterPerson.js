@@ -162,8 +162,13 @@ export default class RegisterPerson extends Component {
     fetchRegisterInfo() {
         (async () => {
             try {
-                var uuri = AUTH_PERMISSION_TIME_TO_BIND_USER + "1" + "/users";
-                // var uuri = "http://localhost:8081/housePeople.json";
+                var uuri;
+                // if (flag == 'begin') {
+                // uuri = "http://localhost:8081/housePeople.json";
+
+                // } else {
+                    uuri = AUTH_PERMISSION_TIME_TO_BIND_USER + "1" + "/users";
+                // }
                 const resC = await fetch(uuri, {
                     method: 'GET',
                     headers: {
@@ -173,6 +178,7 @@ export default class RegisterPerson extends Component {
 
                 const data = await resC.json();
                 var list = data.data;
+                console.log(list);
                 this.setState({
                     visible: false
                 });
@@ -229,32 +235,34 @@ export default class RegisterPerson extends Component {
             subColor: '#f0f0f0'
         };
         return (
-            <View style={styles.container}>
-                <TitleBar title="注册成员" navigation={this.props.navigation}></TitleBar>
-                <ScrollView>
-                    <View>
-                        {
-                            this.state.listViewData.map((u, i) => {
-                                return (
-                                    <TouchableOpacity key={i}
-                                                      onPress={() => {
-                                                          this.showMsg(i);
-                                                      }}>
-
-
-                                        <Card title={u.nickname}>
-                                            <View style={styles.user}>
-                                                <View style={{justifyContent: 'center', flexDirection: 'row'}}>
-                                                    <Image
-                                                        style={{height: 140, width: 160}}
-                                                        resizeMode="cover"
-                                                        source={{uri: BASE_URL + "/" + u.pic}}
-                                                    />
-                                                </View>
-                                                <View style={styles.userInfoWarpper}>
-                                                    <Text style={styles.name}>角色： {u.role.alias}</Text>
-                                                    <Text style={styles.name}>授权时间： {u.time.date[0]}
-                                                        至 {u.time.date[1]}</Text>
+			<View style={styles.container}>
+			<TitleBar title="注册成员" navigation={this.props.navigation}></TitleBar>
+				<ScrollView>
+					<View>
+						{
+							this.state.listViewData.map((u, i) => {
+								return(
+									<TouchableOpacity key={i} 
+									onPress={() => {
+										console.log("111");
+										console.log(i);
+										this.showMsg(i);
+									}}>
+										
+									
+								<Card  title={u.nickname} >
+									<View style={styles.user}>
+										<View style={{justifyContent: 'center', flexDirection: 'row'}}>
+										<Image
+											style={{height: 140, width: 160}}
+											resizeMode="cover"
+											source={{uri: BASE_URL + "/" + u.pic}}
+											// source={require('./img/head.jpg')}
+											/>
+										</View>
+										<View style={styles.userInfoWarpper}>
+										<Text style={styles.name}>角色： {u.role.alias}</Text>
+										<Text style={styles.name}>授权时间： {u.time.date[0]}  至  {u.time.date[1]}</Text>
 
                                                     <Text style={styles.name}>授权星期：
                                                         {u.time.week[0] == '1' ? ' 周一' : ''}

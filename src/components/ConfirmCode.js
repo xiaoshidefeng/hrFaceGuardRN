@@ -229,7 +229,7 @@ export default class ConfirmCode extends Component {
                 >
                     <View style={{flex: 1}}>
                         <WebView
-                            source={{uri: 'http://10.30.90.12:8082'}}
+                            source={{uri: 'https://www.github.com'}}
                         />
 
                     </View>

@@ -29,14 +29,6 @@ class Head extends Component {
         return (
             <View style={ProfilePageStyle.container}>
                 {/* <Image source={require('./img/head.jpg')} /> */}
-                <View style={{alignItems: 'flex-end'}}>
-                    <TouchableWithoutFeedback onPress={this.props.onSettingClick}>
-                        <Image
-                            source={require('./img/head.jpg')}
-                            style={ProfilePageStyle.btn_setting}/>
-                    </TouchableWithoutFeedback>
-
-                </View>
                 <View style={ProfilePageStyle.container_avater}>
                     <Image
                         style={ProfilePageStyle.img_avatar}
@@ -44,99 +36,67 @@ class Head extends Component {
                     />
                     <Text onPress={this.props.onNameClick}>胖虎</Text>
                 </View>
-                <View style={ProfilePageStyle.container_favority_and_reply}>
-                    <TouchableWithoutFeedback onPress={this.props.onFavorityClick}>
-                        <View style={ProfilePageStyle.container_favority}>
-                            <Image
-                                style={ProfilePageStyle.img_favority}
-                                source={require('./img/head.jpg')}/>
-                            <Text style={ProfilePageStyle.tv_favority}>收藏</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={this.props.onReplyClick}>
-                        <View style={ProfilePageStyle.container_reply}>
-                            <Image
-                                style={ProfilePageStyle.img_reply}
-                                source={require('./img/head.jpg')}/>
-                            <Text style={ProfilePageStyle.tv_reply}>评论</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
+
             </View>
         )
     }
 }
 //
-// class SetList extends Component {
-//     render() {
-//         var bgColor = '#DCE3F4';
-//         return (
-//             <View style={{backgroundColor:'#EFEFF4',flex:1}}>
-//                 <View style={{borderBottomWidth:1, backgroundColor:'#f7f7f8',borderColor:'#c8c7cc'}}>
-//                     <Text style={{alignSelf:'center',marginTop:30,marginBottom:10,fontWeight:'bold',fontSize:16}}>Settings</Text>
-//                 </View>
-//                 <View style={{backgroundColor:'#EFEFF4',flex:1}}>
-//                     <SettingsList borderColor='#c8c7cc' defaultItemSize={50}>
-//                         <SettingsList.Header headerStyle={{marginTop:15}}/>
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/wifi.png')}/>}
-//                             title='Wi-Fi'
-//                             titleInfo='Bill Wi The Science Fi'
-//                             titleInfoStyle={styles.titleInfoStyle}
-//                             onPress={() => Alert.alert('Route to Wifi Page')}
-//                         />
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/blutooth.png')}/>}
-//                             title='Blutooth'
-//                             titleInfo='Off'
-//                             titleInfoStyle={styles.titleInfoStyle}
-//                             onPress={() => Alert.alert('Route to Blutooth Page')}
-//                         />
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/cellular.png')}/>}
-//                             title='Cellular'
-//                             onPress={() => Alert.alert('Route To Cellular Page')}
-//                         />
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/hotspot.png')}/>}
-//                             title='Personal Hotspot'
-//                             titleInfo='Off'
-//                             titleInfoStyle={styles.titleInfoStyle}
-//                             onPress={() => Alert.alert('Route To Hotspot Page')}
-//                         />
-//                         <SettingsList.Header headerStyle={{marginTop:15}}/>
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/notifications.png')}/>}
-//                             title='Notifications'
-//                             onPress={() => Alert.alert('Route To Notifications Page')}
-//                         />
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/control.png')}/>}
-//                             title='Control Center'
-//                             onPress={() => Alert.alert('Route To Control Center Page')}
-//                         />
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/dnd.png')}/>}
-//                             title='Do Not Disturb'
-//                             onPress={() => Alert.alert('Route To Do Not Disturb Page')}
-//                         />
-//                         <SettingsList.Header headerStyle={{marginTop:15}}/>
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/general.png')}/>}
-//                             title='General'
-//                             onPress={() => Alert.alert('Route To General Page')}
-//                         />
-//                         <SettingsList.Item
-//                             icon={<Image style={styles.imageStyle} source={require('./images/display.png')}/>}
-//                             title='Display & Brightness'
-//                             onPress={() => Alert.alert('Route To Display Page')}
-//                         />
-//                     </SettingsList>
-//                 </View>
-//             </View>
-//         )
-//     }
-// }
+class SetList extends Component {
+    render() {
+        var bgColor = '#DCE3F4';
+        return (
+            <View style={{backgroundColor:'#f6f6f6', marginTop: 15}}>
+            <View style={{backgroundColor:'#f6f6f6'}}>
+              <SettingsList borderColor='#d6d5d9' defaultItemSize={50}>
+                {/* <SettingsList.Item
+                  hasNavArrow={false}
+                  title='常用设置'
+                  titleStyle={{color:'#009688', fontWeight:'500'}}
+                  itemWidth={50}
+                  borderHide={'Both'}
+                /> */}
+                <SettingsList.Item
+                  icon={
+                    <View style={ProfilePageStyle.imageStyle}>
+                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} source={require('./img/ali/黑名单.png')}/>
+                    </View>
+                  }
+                  hasNavArrow={true}
+                  itemWidth={70}
+                  titleStyle={{color:'black', fontSize: 16}}
+                  title='黑名单'
+                />
+                <SettingsList.Item
+                  icon={
+                    <View style={ProfilePageStyle.imageStyle}>
+                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} source={require('./img/ali/邮件.png')}/>
+                    </View>
+                  }
+                  hasNavArrow={true}                  
+                  title='消息'
+                  itemWidth={70}
+                  titleStyle={{color:'black', fontSize: 16}}
+                  hasNavArrow={false}
+                />
+                <SettingsList.Item
+                  icon={
+                    <View style={ProfilePageStyle.imageStyle}>
+                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} source={require('./img/ali/设置.png')}/>
+                    </View>
+                  }
+                  hasNavArrow={true}                  
+                  title='设置'
+                  itemWidth={70}
+                  titleStyle={{color:'black', fontSize: 16}}
+                  hasNavArrow={false}
+                />
+              </SettingsList>
+            </View>
+          </View>
+        )
+    }
+}
 
 
 export default class Me extends Component {
@@ -152,28 +112,7 @@ export default class Me extends Component {
             <View>
                 <TitleBar title="我" navigation={this.props.navigation}></TitleBar>
                 <Head></Head>
-                {/*<SetList></SetList>*/}
-
-                {/*<View style={{backgroundColor:'#EFEFF4',flex:1}}>*/}
-                    {/*<View style={{backgroundColor:'#EFEFF4',flex:1}}>*/}
-                        {/*<SettingsList borderColor='#c8c7cc' defaultItemSize={50}>*/}
-                            {/*<SettingsList.Header headerStyle={{marginTop:15}}/>*/}
-                            {/*<SettingsList.Item*/}
-                                {/*// icon={<Image style={ProfilePageStyle.imageStyle} source={require('./images/wifi.png')}/>}*/}
-                                {/*title='Wi-Fi'*/}
-                                {/*titleInfo='Bill Wi The Science Fi'*/}
-                                {/*titleInfoStyle={ProfilePageStyle.titleInfoStyle}*/}
-                            {/*/>*/}
-                            {/*<SettingsList.Item*/}
-                                {/*// icon={<Image style={ProfilePageStyle.imageStyle} source={require('./images/blutooth.png')}/>}*/}
-                                {/*title='Blutooth'*/}
-                                {/*titleInfo='Off'*/}
-                                {/*titleInfoStyle={ProfilePageStyle.titleInfoStyle}*/}
-                            {/*/>*/}
-                        {/*</SettingsList>*/}
-                    {/*</View>*/}
-                {/*</View>*/}
-                )
+                <SetList></SetList>
             </View>
 
         );
@@ -207,7 +146,8 @@ const ProfilePageStyle = StyleSheet.create({
     },
     container_avater: {
         alignItems: 'center',
-        marginBottom: 32,
+        marginTop: 32,
+        marginBottom: 26,
     },
     header: {
         backgroundColor: '#333333',
@@ -248,10 +188,12 @@ const ProfilePageStyle = StyleSheet.create({
     },
     imageStyle:{
         marginLeft:15,
+        marginRight:20,
         alignSelf:'center',
-        height:30,
-        width:30
-    },
+        width:20,
+        height:24,
+        justifyContent:'center'
+      },
     titleInfoStyle:{
         fontSize:16,
         color: '#8e8e93'

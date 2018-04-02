@@ -5,26 +5,57 @@
             "user_id": 1,
             "nickname": "萝卜森",
             "role": {
-                "id": 9,
-                "name": "temporary",
-                "alias": "暂行"
+                "id": 12,
+                "name": "expiry",
+                "alias": "暂行过期"
             },
             "time": {
                 "date": [
-                    "2018-03-29",
-                    "2018-03-31"
+                    "2018-03-28",
+                    "2018-03-30"
                 ],
                 "week": [
                     1,
+                    2,
                     3,
+                    4,
+                    5,
+                    6,
                     7
                 ]
             },
+            "pic": "pic/pr59ztwuxQbxjNw6thij47HYySiSu2sPGOg8BXzo.jpeg",
             "created_at": "2018-02-20 00:00:00"
         },
         {
             "user_id": 2,
             "nickname": "小风",
+            "role": {
+                "id": 6,
+                "name": "family",
+                "alias": "家人"
+            },
+            "time": {
+                "date": [
+                    "2018-03-29",
+                    "2018-03-22"
+                ],
+                "week": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7
+                ]
+            },
+            "pic": "pic/oUVatMOOkLdIOVnzBKU4VZB3WVAYBWI2fOEWgcdo.jpeg",
+            "created_at": "2018-02-22 14:33:36"
+        },
+        {
+            "user_id": 4,
+            "nickname": "测试小哥",
             "role": {
                 "id": 5,
                 "name": "owner",
@@ -46,7 +77,20 @@
                     7
                 ]
             },
+            "pic": "pic/HxwnoXKn2LVUZQEszkywaUbsWgQDz0MdNqdYh5j9.jpeg",
             "created_at": "2018-02-22 14:33:36"
+        },
+        {
+            "user_id": 54,
+            "nickname": null,
+            "role": {
+                "id": 9,
+                "name": "temporary",
+                "alias": "暂行"
+            },
+            "time": false,
+            "pic": "pic/gacb814yinAP5YHMhmy8P3JjsDQ5GDvT9NTI1v2F.png",
+            "created_at": "2018-04-02 03:23:12"
         }
     ]
 }
