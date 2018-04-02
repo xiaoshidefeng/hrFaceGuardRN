@@ -115,3 +115,11 @@ export const GET_IMG_BY_CODE = BASE_URL + '/user_code_pic/';
  */
 export const GATE_CONTROL = BASE_URL + '/switch_auth/';
 
+
+
+/**
+ * 扫码后改变状态
+ * method: POST
+ * /change_user_state
+ */
+export const CNANGE_STATE = BASE_URL + '/change_user_state';

@@ -42,11 +42,14 @@ export default class Login extends Component {
         const {logining} = this.state;
         return (
             <View style={styles.container}>
-                <StatusBar backgroundColor={'#008B8B'}/>
+                <StatusBar backgroundColor={'#1C86EE'}/>
                 <TouchableWithoutFeedback onPress={() => this.toTakePhoto()}>
                     <View style={styles.img_facewarpper}>
-                        <Image style={styles.img_face}
-                               source={require('./components/img/face.png')}/>
+                        <Image 
+                            //    source={require('./components/img/face.png')}
+                            source={{uri: 'http://otj6w86xd.bkt.clouddn.com/face.png'}}
+                            style={styles.img_face}
+                               />
                     </View>
                 </TouchableWithoutFeedback>
                 <View style={styles.warpper}>
@@ -76,9 +79,10 @@ export default class Login extends Component {
                     <Button
                         title='登 录'
                         style={styles.loginBtn}
-                        borderRadius={10}
+                        borderRadius={70}
                         fontSize={18}
                         loading={logining}
+                        backgroundColor={'#7bbfea'}
                         onPress={() => this.loginInMainpage()}/>
                 </View>
                 <Toast ref="toast"/>
@@ -100,7 +104,7 @@ export default class Login extends Component {
 
     fetchLogin = () => {
         let formData = new FormData();
-        formData.append("email", "test@qq.com");
+        formData.append("email", "test3@qq.com");
         formData.append("password", "123456");
         this.setState({logining: true});
 
@@ -193,11 +197,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#008B8B',
+        backgroundColor: '#1C86EE',
 
     },
     img_facewarpper: {
         height: 64,
+        width: 64,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -222,12 +227,12 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     loginBtn: {
-        marginTop: 80
+        marginTop: 80,
     },
     loginText: {
         fontSize: 20,
         alignSelf: 'center',
-        color: '#FFF'
+        backgroundColor: '#00BFFF'
     }
 
 })

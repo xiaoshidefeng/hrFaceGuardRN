@@ -32,9 +32,10 @@ class Head extends Component {
                 <View style={ProfilePageStyle.container_avater}>
                     <Image
                         style={ProfilePageStyle.img_avatar}
-                        source={require('./img/png.png')}
+                        // source={require('./img/png.png')}
+                        source={{uri: 'http://otj6w86xd.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180402161554.png'}}                        
                     />
-                    <Text onPress={this.props.onNameClick}>胖虎</Text>
+                    <Text onPress={this.props.onNameClick}>业主小风</Text>
                 </View>
 
             </View>
@@ -59,7 +60,11 @@ class SetList extends Component {
                 <SettingsList.Item
                   icon={
                     <View style={ProfilePageStyle.imageStyle}>
-                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} source={require('./img/ali/黑名单.png')}/>
+                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} 
+                    //   source={require('./img/ali/黑名单.png')}
+                    source={{uri: 'http://otj6w86xd.bkt.clouddn.com/%E9%BB%91%E5%90%8D%E5%8D%95.png'}}                        
+                    
+                      />
                     </View>
                   }
                   hasNavArrow={true}
@@ -70,7 +75,10 @@ class SetList extends Component {
                 <SettingsList.Item
                   icon={
                     <View style={ProfilePageStyle.imageStyle}>
-                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} source={require('./img/ali/邮件.png')}/>
+                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} 
+                    //   source={require('./img/ali/邮件.png')}
+                    source={{uri: 'http://otj6w86xd.bkt.clouddn.com/%E9%82%AE%E4%BB%B6.png'}}                        
+                      />
                     </View>
                   }
                   hasNavArrow={true}                  
@@ -82,7 +90,10 @@ class SetList extends Component {
                 <SettingsList.Item
                   icon={
                     <View style={ProfilePageStyle.imageStyle}>
-                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} source={require('./img/ali/设置.png')}/>
+                      <Image style={{alignSelf:'center',height:24, width:24, marginLeft: 14}} 
+                    //   source={require('./img/ali/设置.png')}
+                    source={{uri: 'http://otj6w86xd.bkt.clouddn.com/%E8%AE%BE%E7%BD%AE.png'}}          
+                      />
                     </View>
                   }
                   hasNavArrow={true}                  

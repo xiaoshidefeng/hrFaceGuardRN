@@ -24,7 +24,7 @@ export default class TitleBar extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <StatusBar backgroundColor={'#008B8B'}/>
+                <StatusBar backgroundColor={'#1C86EE'}/>
 
                 <View style={styles.text_warpper}>
                     <Text style={{fontSize: 20, color: '#fff', paddingBottom: 10}}>{this.props.title}</Text>
@@ -32,7 +32,9 @@ export default class TitleBar extends Component {
                 <TouchableNativeFeedback onPress={() => this.toQrScan()}>
                     <View style={styles.qr_warpper}>
                         <Image style={styles.img_style}
-                               source={require('./img/qrscan.png')}
+                            //    source={require('./img/qrscan.png')}
+                            source={{uri: 'http://otj6w86xd.bkt.clouddn.com/qrscan.png'}}
+                            
                         />
                     </View>
                 </TouchableNativeFeedback>
@@ -44,7 +46,7 @@ export default class TitleBar extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#008B8B',
+        backgroundColor: '#1C86EE',
         height: 45,
         flexDirection: 'row',
         justifyContent: 'center',

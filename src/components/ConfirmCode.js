@@ -5,13 +5,15 @@ import {
     Text,
     View,
     Image,
-    WebView
+    WebView,
+    TouchableOpacity,
+    
 } from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import TitleBar from './TitleBar';
 import CodeInput from 'react-native-confirmation-code-input';
 import {Button} from 'react-native-elements';
-import {GET_IMG_BY_CODE, BASE_URL, GATE_CONTROL} from '../commons/Api';
+import {GET_IMG_BY_CODE, BASE_URL, GATE_CONTROL, CNANGE_STATE} from '../commons/Api';
 import PopupDialog,
 {
     SlideAnimation,
@@ -83,15 +85,15 @@ export default class ConfirmCode extends Component {
                 const data = await resC.json();
                 if (data.success) {
                     this.setState({imgurl: BASE_URL + "/" + data.data.pic});
-
+                    this.setState({user_id: data.data.user_id});
                 }
-
+                this.scaleAnimationDialog.dismiss();
+                this.showWebViewDialog.dismiss();
                 return true;
 
             } catch (err) {
-                console.log(err)
-                this.setState({logining: false});
-                this.refs.toast.show('登录失败 请检查账号密码');
+                console.log(err);
+                this.refs.toast.show('图片获取失败失败');
             }
         })();
     }
@@ -112,7 +114,37 @@ export default class ConfirmCode extends Component {
                     // },
                     body: formData
                 });
-                const data = await resC.json();
+                // const data = await resC.json();
+                this.scaleAnimationDialog.dismiss();
+                this.showWebViewDialog.dismiss();
+
+                return true;
+
+            } catch (err) {
+                console.log(err)
+                this.setState({logining: false});
+                this.refs.toast.show('授权失败');
+            }
+        })();
+    }
+
+    toFetchState() {
+
+        let formData = new FormData();
+        formData.append("user_id", this.state.user_id);
+        formData.append("address_id", "1");
+
+        (async () => {
+            try {
+                const resC = await fetch(CNANGE_STATE, {
+                    method: 'POST',
+                    // headers: {
+                    //     'Accept': 'application/json',
+                    //     'Content-Type': 'application/json',
+                    // },
+                    body: formData
+                });
+                // const data = await resC.json();
                 this.scaleAnimationDialog.dismiss();
                 this.showWebViewDialog.dismiss();
 
@@ -131,7 +163,7 @@ export default class ConfirmCode extends Component {
         return (
             <View style={styles.container}>
                 <TitleBar title="验证码" navigation={this.props.navigation}></TitleBar>
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, justifyContent:'center'}}>
                     <CodeInput
                         ref="codeInputRef2"
                         keyboardType="numeric"
@@ -143,12 +175,28 @@ export default class ConfirmCode extends Component {
                         codeLength={4}
                         size={50}
                         onFulfill={(isValid) => this.checkNumberLegal(isValid)}
-                        containerStyle={{marginTop: 30}}
+                        containerStyle={{marginTop: 100}}
                         codeInputStyle={{borderWidth: 1.5}}
                     />
                 </View>
-                <View style={{flex: 1}}>
-                    <Button
+                <View style={{flex: 1, justifyContent:'center', flexDirection:'row'}}>
+                    <TouchableOpacity
+                    onPress={() => {
+                        this.showScaleAnimationDialog();
+                    }}
+                    >
+                        
+                    <Image style={{height:150, width:150,justifyContent:'center'}}
+                        source={{uri: 'http://otj6w86xd.bkt.clouddn.com/%E9%AA%8C%E8%AF%81.png'}}
+                    />
+                    <View style={{flexDirection:'row',flex: 1, justifyContent:'center',textAlign: 'center'}}>
+
+                        <Text style={{fontSize:25}}>验  证</Text>
+                    </View>
+                    
+                    </TouchableOpacity>
+
+                    {/* <Button
                         title='暂时授权'
                         style={styles.ConfirmBtn}
                         borderRadius={100}
@@ -156,7 +204,7 @@ export default class ConfirmCode extends Component {
                         // loading={logining}
                         onPress={() => {
                             this.showScaleAnimationDialog();
-                        }}/>
+                        }}/> */}
 
                 </View>
 
