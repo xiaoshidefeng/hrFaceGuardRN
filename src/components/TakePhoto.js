@@ -29,7 +29,7 @@ export default class TakePhoto extends Component {
         return (
             <View style={styles.container}>
                 {/* <View style={{ flex: 1 }}> */}
-                    <Spinner visible={this.state.visible} textContent={"正在登陆..."} textStyle={{color: '#FFF'}} />
+                    <Spinner visible={this.state.visible} textContent={"正在登录..."} textStyle={{color: '#FFF'}} />
                 {/* </View> */}
                 <RNCamera
                     ref={ref => {

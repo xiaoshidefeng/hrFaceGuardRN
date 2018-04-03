@@ -46,6 +46,7 @@ export default class ConfirmCode extends Component {
         });
         JPushModule.addReceiveCustomMsgListener((message) => {
             this.setState({pushMsg: message});
+            this.showWebViewDialog.show();
         });
         JPushModule.addReceiveNotificationListener((message) => {
             console.log("receive notification: " + message);
@@ -189,7 +190,7 @@ export default class ConfirmCode extends Component {
                     <Image style={{height:150, width:150,justifyContent:'center'}}
                         source={{uri: 'http://otj6w86xd.bkt.clouddn.com/%E9%AA%8C%E8%AF%81.png'}}
                     />
-                    <View style={{flexDirection:'row',flex: 1, justifyContent:'center',textAlign: 'center'}}>
+                    <View style={{flexDirection:'row',flex: 1, justifyContent:'center'}}>
 
                         <Text style={{fontSize:25}}>验  证</Text>
                     </View>
@@ -250,7 +251,7 @@ export default class ConfirmCode extends Component {
                     ref={(popupDialog) => {
                         this.showWebViewDialog = popupDialog;
                     }}
-                    height={0.7}
+                    height={0.8}
                     dialogAnimation={scaleAnimation}
                     dialogTitle={<DialogTitle title='查看视频'/>}
                     actions={[
@@ -277,7 +278,7 @@ export default class ConfirmCode extends Component {
                 >
                     <View style={{flex: 1}}>
                         <WebView
-                            source={{uri: 'https://www.github.com'}}
+                            source={{uri: 'http://118.24.0.78:8082'}}
                         />
 
                     </View>

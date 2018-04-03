@@ -63,7 +63,7 @@ export default class InOutLog extends Component {
         endTime: '点击选择结束时间',
         isShowPeopleDate: false,
         imageUrl: 'www',
-        radioSelectedData: ''
+        radioSelectedData: '亲戚'
     }
 
     // ActionSheetCustom

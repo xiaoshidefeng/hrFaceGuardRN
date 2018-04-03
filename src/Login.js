@@ -46,8 +46,8 @@ export default class Login extends Component {
                 <TouchableWithoutFeedback onPress={() => this.toTakePhoto()}>
                     <View style={styles.img_facewarpper}>
                         <Image 
-                            //    source={require('./components/img/face.png')}
-                            source={{uri: 'http://otj6w86xd.bkt.clouddn.com/face.png'}}
+                               source={require('./components/img/face.png')}
+                            // source={{uri: 'http://otj6w86xd.bkt.clouddn.com/face.png'}}
                             style={styles.img_face}
                                />
                     </View>
@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
     },
     img_facewarpper: {
         height: 64,
-        width: 64,
         alignItems: 'center',
         justifyContent: 'center',
     },
