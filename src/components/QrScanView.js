@@ -75,6 +75,14 @@ export default class QrScanView extends React.Component {
         };
     }
 
+    state = {
+        isScan: false
+    }
+
+    componentDidMount() {
+        this.setState({isScan: false});
+    }
+
     takePicture = () => {
         if (this.camera) {
             this.camera
@@ -174,7 +182,11 @@ export default class QrScanView extends React.Component {
     onBarCodeRead = (data) => {
         //将返回的结果转为对象
         if (data.type == 'QR_CODE') {
+            if (this.state.isScan) {
+                return;
+            }
             this.toConfirm(data.data);
+            this.setState({isScan: true});
         }
 
     }

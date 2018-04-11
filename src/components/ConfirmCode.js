@@ -7,7 +7,8 @@ import {
     Image,
     WebView,
     TouchableOpacity,
-    
+    TouchableWithoutFeedback,
+    TouchableNativeFeedback
 } from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import TitleBar from './TitleBar';
@@ -38,7 +39,7 @@ export default class ConfirmCode extends Component {
         pushMsg: ''
     }
 
-    // example
+    // // example
     componentDidMount() {
         JPushModule.notifyJSDidLoad((resultCode) => {
             // do something
@@ -46,7 +47,6 @@ export default class ConfirmCode extends Component {
         });
         JPushModule.addReceiveCustomMsgListener((message) => {
             this.setState({pushMsg: message});
-            this.showWebViewDialog.show();
         });
         JPushModule.addReceiveNotificationListener((message) => {
             console.log("receive notification: " + message);
@@ -186,15 +186,17 @@ export default class ConfirmCode extends Component {
                         this.showScaleAnimationDialog();
                     }}
                     >
-                        
+                        <View>
+
                     <Image style={{height:150, width:150,justifyContent:'center'}}
                         source={{uri: 'http://otj6w86xd.bkt.clouddn.com/%E9%AA%8C%E8%AF%81.png'}}
-                    />
+                        />
                     <View style={{flexDirection:'row',flex: 1, justifyContent:'center'}}>
 
                         <Text style={{fontSize:25}}>验  证</Text>
                     </View>
                     
+                        </View>
                     </TouchableOpacity>
 
                     {/* <Button
@@ -207,6 +209,14 @@ export default class ConfirmCode extends Component {
                             this.showScaleAnimationDialog();
                         }}/> */}
 
+                </View>
+                <View style={styles.fakeView}>
+                    <TouchableWithoutFeedback style={styles.fakeView} onPress={() => {
+                        this.showWebViewDialog.show();
+                    }}
+                    >
+                    <View style={styles.fakeView}></View>
+                    </TouchableWithoutFeedback>
                 </View>
 
                 <PopupDialog
@@ -224,6 +234,7 @@ export default class ConfirmCode extends Component {
                                 buttonStyle={styles.dia_btn}
                                 onPress={() => {
                                     this.toFetchConfirmCode();
+                                    this.toFetchState();
 
                                 }}
                                 key="button-1"
@@ -322,6 +333,10 @@ const styles = StyleSheet.create({
         width: 100,
         height: 120,
 
+    },
+    fakeView: {
+        backgroundColor: '#E0F8F1',
+        height: 50
     }
 
 })

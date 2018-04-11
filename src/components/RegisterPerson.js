@@ -11,6 +11,7 @@ import {
     CheckBox,
     ListView,
     ScrollView,
+    TextInput
 } from 'react-native';
 import TitleBar from './TitleBar';
 import {AUTH_PERMISSION_TIME_TO_BIND_USER, BASE_URL, UPDATE_PERMISSION_TIME} from '../commons/Api';
@@ -26,6 +27,10 @@ import Accordion from 'react-native-collapsible/Accordion';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Calendar from 'react-native-calendar-select';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
+// import SYImagePicker from 'react-native-syan-image-picker';
+import {SelectMultipleButton, SelectMultipleGroupButton} from 'react-native-selectmultiple-button';
 
 const slideAnimation = new SlideAnimation({slideFrom: 'bottom'});
 const scaleAnimation = new ScaleAnimation();
@@ -37,6 +42,9 @@ const SECTIONS = [
         content: 'Lorem ipsum...'
     }
 ];
+
+const ios_blue = '#007AFF'
+const radioData = ['家人', '亲戚', '保姆', '暂行']
 
 export default class RegisterPerson extends Component {
     constructor(props) {
@@ -59,7 +67,9 @@ export default class RegisterPerson extends Component {
         days: [true, true, true, true, true, true, true, true],
         startDate: new Date(2018, 3, 29),
         endDate: new Date(2018, 3, 31),
-        visibleLoad: false
+        visibleLoad: false,
+        photos: [],
+        radioSelectedData: '暂行'
     }
 
     // 日期区间选择
@@ -361,6 +371,7 @@ export default class RegisterPerson extends Component {
                     <View style={{flex: 1}}>
                         <Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}}/>
                     </View>
+                    </ScrollView>
                     <PopupDialog
                         ref={(popupDialog) => {
                             this.scaleAnimationDialog = popupDialog;
@@ -456,9 +467,90 @@ export default class RegisterPerson extends Component {
 
                         </View>
                     </PopupDialog>
-                </ScrollView>
+                            
+                
+                    <PopupDialog
+                        ref={(popupDialog) => {
+                            this.addPeopleDia = popupDialog;
+                        }}
+                        dialogAnimation={slideAnimation}
+                        height={0.55}
+                        actions={[
+                            <View style={styles.dia_btn_warpper}
+                                  key="view-3">
+                                <DialogButton
+                                    text="添加"
+                                    buttonStyle={styles.dia_btn}
+                                    onPress={() => {
+                                        this.addPeopleDia.dismiss();
+                                    }}
+                                    key="button-5"
+                                />
+                                <DialogButton
+                                    text="取消"
+                                    buttonStyle={styles.dia_btn}
+                                    onPress={() => {
+                                        this.addPeopleDia.dismiss();
+                                    }}
+                                    key="button-6"
+                                />
+                            </View>
+                        ]}
+                    >    
+                    {this._renderAddPeople()}
+                    </PopupDialog>
+                
+
+                <ActionButton buttonColor="rgba(231,76,60,1)">
+                <ActionButton.Item buttonColor='#3498db' title="添加访客" onPress={() => {
+                    this.addPeopleDia.show();
+                }}>
+                    <Icon name="md-notifications-off" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+                <ActionButton.Item buttonColor='#1abc9c' title="删除访客" onPress={() => {}}>
+                    <Icon name="md-done-all" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+                </ActionButton>
             </View>
         );
+    }
+
+    _renderAddPeople() {
+        return(
+            <View style={styles.person_warpper}>
+                <Text style={{fontSize: 28}}>添加照片</Text>
+                <Image
+                    style={styles.person_img}
+                    source={require('./img/ali/拍照.png')}/>
+                <TextInput placeholder="昵称" style={{width:50, fontSize:18,marginTop:5}}></TextInput>
+                {this._tabView()}
+            </View>
+        )
+    }
+
+    _tabView() {
+        return (
+            <View style={{marginTop:5}}>
+
+                <Text style={{color: ios_blue, marginLeft: 20}}>
+                    当前角色 {this.state.radioSelectedData}
+                </Text>
+                <View
+                    style={{flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center'}}>
+                    {
+                        radioData.map((gender) =>
+                            <SelectMultipleButton
+                                key={gender}
+                                multiple={false}
+                                value={gender}
+                                displayValue={gender}
+                                selected={this.state.radioSelectedData === gender}
+                                singleTap={(valueTap) => this._singleTapRadioSelectedButtons(valueTap, gender)}/>
+                        )
+                    }
+                </View>
+            </View>
+        )
     }
 
     _renderHeader() {
@@ -714,6 +806,56 @@ export default class RegisterPerson extends Component {
             </View>
         )
     }
+
+        /**
+     * 使用方式sync/await
+     * 相册参数暂时只支持默认参数中罗列的属性；
+     * @returns {Promise<void>}
+     */
+    // handleAsyncSelectPhoto = async () => {
+    //     SYImagePicker.removeAllPhoto()
+    //     try {
+    //         const photos = await SYImagePicker.asyncShowImagePicker({imageCount: 1, isCrop: true, showCropCircle: true});
+    //         // 选择成功
+    //         this.setState({
+    //             photos: [...this.state.photos, ...photos]
+    //         })
+    //     } catch (err) {
+    //         // 取消选择，err.message为"取消"
+    //     }
+    // };
+
+    // handlePromiseSelectPhoto = () => {
+    //     SYImagePicker.asyncShowImagePicker({imageCount: 3, enableBase64: true})
+    //         .then(photos => {
+    //             console.log(photos);
+    //             const arr = photos.map(v=>{
+    //                 return { ...v, enableBase64:true}
+    //             });
+    //             // 选择成功
+    //             this.setState({
+    //                 photos: [...this.state.photos, ...arr]
+    //             })
+    //         })
+    //         .catch(err => {
+    //             // 取消选择，err.message为"取消"
+    //         })
+    // };
+
+    // handleLaunchCamera = () => {
+    //     SYImagePicker.openCamera({isCrop: true, showCropCircle: true, showCropFrame: false}, (err, photos) => {
+    //         console.log(err, photos);
+    //         if (!err) {
+    //             this.setState({
+    //                 photos: [...this.state.photos, ...photos]
+    //             })
+    //         }
+    //     })
+    // };
+
+    // handleDeleteCache = () => {
+    //     SYImagePicker.deleteCache()
+    // };
 }
 
 const styles = StyleSheet.create({

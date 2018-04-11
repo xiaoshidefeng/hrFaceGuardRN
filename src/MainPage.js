@@ -17,6 +17,7 @@ import InOutLog from './components/InOutLog';
 import RegisterPerson from './components/RegisterPerson';
 import Me from './components/Me';
 import {TAB_SELECT_COLOR} from './commons/ColorUtil';
+import JPushModule from 'jpush-react-native';
 
 const deviceW = Dimensions.get('window').width
 
@@ -45,10 +46,25 @@ export default class MainPage extends Component {
     };
 
     componentWillMount() {
+        // JPushModule.notifyJSDidLoad((resultCode) => {
+        //     // do something
+        //     console.log("receive notifyJSDidLoad: " + resultCode);
+        // });
+        // JPushModule.addReceiveCustomMsgListener((message) => {
+        //     this.setState({pushMsg: message});
+        //     this.showWebViewDialog.show();
+        // });
+        // JPushModule.addReceiveNotificationListener((message) => {
+        //     console.log("receive notification: " + message);
+        //     console.log("show dia");
+        //     // this.showWebViewDialog.show();
+        // })
         this.fetchUserInfo();
     }
 
     componentDidMount() {
+        // JPushModule.removeReceiveCustomMsgListener();
+        // JPushModule.removeReceiveNotificationListener();
         if (Platform.OS === 'android') BackHandler.addEventListener('hardwareBackPress', this._onBackPressed);
         AppState.addEventListener('change', this._onAppStateChanged);
     }
