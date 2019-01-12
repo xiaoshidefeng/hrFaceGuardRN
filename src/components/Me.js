@@ -35,7 +35,7 @@ class Head extends Component {
                         // source={require('./img/png.png')}
                         source={{uri: 'http://otj6w86xd.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180402161554.png'}}                        
                     />
-                    <Text onPress={this.props.onNameClick}>业主小风</Text>
+                    <Text onPress={this.props.onNameClick}>业主阿伟</Text>
                 </View>
 
             </View>
