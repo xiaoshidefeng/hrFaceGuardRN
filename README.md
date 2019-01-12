@@ -1,23 +1,24 @@
 ## 虹软人脸识别门禁系统 移动端
 
-开发框架 ： React-Native
+### 开发框架 ： 
+React-Native
 
-项目成绩：
+### 项目成绩：
 
 * 获2018年浙江省大学生服务外包创新应用大赛一等奖
 * 获2018年中国大学生服务外包创新创业大赛大赛三等奖
 
 
-项目整体框架：
+### 项目整体框架：
 ![项目整体框架](public/total.png)
 
-移动端概览：
+### 移动端概览：
 
 <img src="public/login.png" width="50%" height="50%"><img src="public/code.png" width="50%" height="50%"><img src="public/history.png" width="50%" height="50%"><img src="public/manage.png" width="50%" height="50%"><img src="public/add.png" width="50%" height="50%"><img src="public/period.png" width="50%" height="50%"><img src="public/me.png" width="50%" height="50%"><img src="public/qr.png" width="50%" height="50%">
 
 (照片已做打码处理)
 
-说明：
+### 说明：
 
 1、登录支持账号密码登录与人脸识别登录。
 
@@ -31,7 +32,7 @@
 
 6、可通过操作门禁端来发送推送通知到APP，并在APP端查看门禁端的实时内容（与门禁处实时视频流交互）。
 
-框架：
+### 框架：
 
 * jcore-react-native 
 * jpush-react-native 
